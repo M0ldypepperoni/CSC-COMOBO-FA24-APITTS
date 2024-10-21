@@ -19,7 +19,7 @@ public class Bottles {
 			 else if (i == 0) System.out.println("Go to the store and buy some more, " + strt + " bottles of beer on the wall.");
 			 else System.out.println("Take one down and pass it around, " + bottles + " bottles of beer on the wall.");
 		}
-
+		input.close();
 	}
 
 }

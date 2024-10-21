@@ -4,19 +4,19 @@ public class WarDriver {
 	public static void main(String[] args) {
 		Card[] cards = new Card[52];
 		
-		int index = 0;
+		Deck deck = new Deck();
 		
-		for (int suit = 0; suit <= 3; suit++) {
-			for (int rank = 0; rank < 13; rank++) {
-				cards[index] = new Card(rank, suit);
-				index ++;
-			}
-		}
-		System.out.println(cards[25]);
-		Card target = new Card(12, 3);
-		System.out.println(search(cards, target));
-	
-		System.out.println(binarySearch(cards, target));
+		deck.print();
+		 
+		deck.shuffle();
+		
+		deck.print();
+		
+//		System.out.println(cards[25]);
+//		Card target = new Card(12, 3);
+//		System.out.println(search(cards, target));
+//	
+//		System.out.println(binarySearch(cards, target));
 	}
 	
 	public static void printDeck(Card[] cards) {
