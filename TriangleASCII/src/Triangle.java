@@ -7,7 +7,7 @@ public class Triangle {
 		char fill = ' ';
 		int size = 0;
 		char con = 'y';
-		
+
 		while (con == 'y') {
 			System.out.println("Please enter a number between 1 - 50:");
 			while (true) {
