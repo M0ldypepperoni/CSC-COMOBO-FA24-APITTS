@@ -2,56 +2,72 @@
 public class WarDriver {
 
 	public static void main(String[] args) {
-		Card[] cards = new Card[52];
-		
 		Deck deck = new Deck();
-		
-		//deck.print();
-		 
+		int count = 0;
+
 		deck.shuffle();
-		Deck p1Deck = deck.subdeck(0, 25);
-		Deck p2Deck = deck.subdeck(26, 51);
-		//deck.print();
-		//
-		p1Deck.selectionSort();
-		//deck.print();
-		p1Deck.print();
-//		System.out.println(cards[25]);
-//		Card target = new Card(12, 3);
-//		System.out.println(search(cards, target));
-//	
-//		System.out.println(binarySearch(cards, target));
+
+		Pile p1 = new Pile();
+		p1.addDeck(deck.subdeck(0, 25));
+
+		Pile p2 = new Pile();
+		p2.addDeck(deck.subdeck(26, 51));
+
+		Pile mid = new Pile();
+
+		while (!p1.isEmpty() && !p2.isEmpty()) {
+			Card c1 = p1.popCard();
+			Card c2 = p2.popCard();
+			mid.addCard(c1);
+			mid.addCard(c2);
+			
+			int difference = c1.getRank() - c2.getRank();
+			count++;
+			if (difference > 0) {
+				p1.addPile(mid);
+			} else if (difference < 0) {
+				p2.addPile(mid);
+			} else {
+
+			}
+			System.out.println(count);
+		}
+		if (p1.isEmpty()) {
+			System.out.println("Player 2 Wins!");
+		} else {
+			System.out.println("Player 1 Wins!");
+		}
 	}
-	
+
 	public static void printDeck(Card[] cards) {
 		for (int i = 0; i < 52; i++) {
 			System.out.println(cards[i]);
 		}
 	}
-	
+
 	public static int search(Card[] cards, Card target) {
-		for(int i = 0; i < cards.length; i++) {
-			if(cards[i].equals(target)) {
+		for (int i = 0; i < cards.length; i++) {
+			if (cards[i].equals(target)) {
 				return i;
 			}
 		}
 		return -1;
 	}
-	
+
 	public static int binarySearch(Card[] cards, Card target) {
 		int low = 0;
 		int high = cards.length - 1;
 		while (low <= high) {
-			int mid = (low + high)/2;
+			int mid = (low + high) / 2;
 			int comp = cards[mid].compareTo(target);
-			
+
 			if (comp == 0) {
 				return mid;
 			} else if (comp < 0) {
 				low = mid + 1;
 			} else {
 				high = mid - 1;
-			}	
+			}
 		}
 		return -1;
 	}
