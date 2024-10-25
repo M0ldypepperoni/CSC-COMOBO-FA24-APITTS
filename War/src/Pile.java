@@ -1,6 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class Pile {
+	public static Random rand = new Random();
+	
 	private ArrayList<Card> cards;
 
 	public Pile() {
@@ -26,12 +30,33 @@ public class Pile {
 	}
 	
 	public void addPile(Pile oldPile) {
-		for(Card card : oldPile.getCards()) {
-			this.cards.add(card);
+		while (!oldPile.isEmpty()) {
+			this.cards.add(oldPile.popCard());
 		}
+	}
+	
+	public void clear() {
+		this.cards = new ArrayList<Card>();
+	}
+	
+	public int size() {
+		return this.cards.size();
 	}
 	
 	public ArrayList<Card> getCards() {
 		return cards;
+	}
+	
+	public void shufflePile() {
+		Collections.shuffle(cards);
+	}
+	
+	@Override
+	public String toString() {
+		String str = "";
+		for (Card card : this.cards) {
+			str +=  card + ", ";
+		}
+		return str;
 	}
 }

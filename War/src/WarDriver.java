@@ -18,6 +18,7 @@ public class WarDriver {
 		while (!p1.isEmpty() && !p2.isEmpty()) {
 			Card c1 = p1.popCard();
 			Card c2 = p2.popCard();
+			System.out.println(c1 + ", " + c2);
 			mid.addCard(c1);
 			mid.addCard(c2);
 			
@@ -25,12 +26,24 @@ public class WarDriver {
 			count++;
 			if (difference > 0) {
 				p1.addPile(mid);
+				System.out.println("P1 wins");
+				mid.clear();
 			} else if (difference < 0) {
 				p2.addPile(mid);
+				System.out.println("P2 wins");
+				mid.clear();
 			} else {
-
+//				for (int i = 0; i < 10; i++) {
+//					mid.addCard(p1.popCard());
+//					mid.addCard(p2.popCard());
+//				}
+				System.out.println("Tie!");
 			}
 			System.out.println(count);
+			System.out.println("P1 cards (" + p1.size() + "):" + p1.toString() + "\nP2 cards (" + p2.size() + "):" + p2.toString());
+			p1.shufflePile();
+			p2.shufflePile();
+			
 		}
 		if (p1.isEmpty()) {
 			System.out.println("Player 2 Wins!");
