@@ -3,22 +3,19 @@ public class CourseAP {
 	private String courseNumber;
 	private int students;
 	private int maxStudents;
-	private String room;
 	private int credits;
 
 	public CourseAP() {
 		this.courseNumber = "";
 		this.students = 0;
 		this.maxStudents = 0;
-		this.room = "";
 		this.credits = 0;
 	}
 
-	public CourseAP(String courseNumber, int students, int maxStudents, String room, int credits) {
+	public CourseAP(String courseNumber, int students, int maxStudents, int credits) {
 		this.courseNumber = courseNumber;
 		this.students = students;
 		this.maxStudents = maxStudents;
-		this.room = room;
 		this.credits = credits;
 	}
 
@@ -46,13 +43,6 @@ public class CourseAP {
 		this.maxStudents = maxStudents;
 	}
 
-	public String getRoom() {
-		return room;
-	}
-
-	public void setRoom(String room) {
-		this.room = room;
-	}
 
 	public int getCredits() {
 		return credits;
@@ -65,7 +55,7 @@ public class CourseAP {
 	@Override
 	public String toString() {
 		return "courseNumber: " + courseNumber + "\nstudents: " + students + "\nmaxStudents: " + maxStudents
-				+ "\nroom: " + room + "\ncredits: " + credits;
+			 + "\ncredits: " + credits;
 	}
 
 }
