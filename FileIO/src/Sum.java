@@ -8,6 +8,9 @@ public class Sum {
 
 	public static void main(String[] args) throws IOException {
 		Scanner input = null;
+		double sum = 0.0;
+		
+		
 
 	}
 

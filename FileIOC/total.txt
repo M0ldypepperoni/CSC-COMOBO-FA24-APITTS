@@ -1,0 +1,3 @@
+Your Subtotal is $30.06
+Your tax is $2.42
+Your total is $32.48

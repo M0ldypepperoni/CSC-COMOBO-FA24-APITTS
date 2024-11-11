@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Student {
@@ -47,7 +49,19 @@ public class Student {
 			System.out.println();
 		}
 	}
-	
+	public void writeToFile() {
+		String outFile = "C:\\Users\\S03090733\\CSC-COMOBO-FA24-APITTS\\Classes\\classes.txt";
+			try {
+				FileWriter writer = new FileWriter(outFile);
+				for(CourseAP crse : courses) {
+					
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
 	private static void printDetails(CourseAP course) {
 		System.out.println("Course number: " + course.getCourseNumber());
 		System.out.println("Number of students:" + course.getStudents());
