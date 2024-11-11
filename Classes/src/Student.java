@@ -54,8 +54,19 @@ public class Student {
 			try {
 				FileWriter writer = new FileWriter(outFile);
 				for(CourseAP crse : courses) {
-					
+					writer.write(crse.getCourseNumber());	
+					writer.write(crse.getStudents());	
+					writer.write(crse.getMaxStudents());	
+					writer.write(crse.getCredits());
+					if(crse instanceof InPersonCourse) {
+						writer.write(((InPersonCourse) crse).getRoom());
+					} if (crse instanceof OnlineCourse) {
+						writer.write(((OnlineCourse) crse).getEmail());
+					} if (crse instanceof RemoteCourse) {
+						writer.write(((RemoteCourse) crse).getWebEx());
+					}
 				}
+				writer.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

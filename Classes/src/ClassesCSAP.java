@@ -14,10 +14,11 @@ public class ClassesCSAP {
 		
 		Student avery = new Student("Avery", "Pitts", "S03090733");
 		System.out.println(avery);
-		avery.addCourse(norCourse);
-		avery.addCourse(course4);
-		avery.addCourse(course2);
-		avery.printCourses();
+//		avery.addCourse(norCourse);
+//		avery.addCourse(course4);
+//		avery.addCourse(course2);
+//		avery.printCourses();
+		avery.writeToFile();
 	}
 
 	public static void classInfo(CourseAP course1) {
