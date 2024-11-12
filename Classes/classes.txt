@@ -1,0 +1,20 @@
+First name: Avery
+Last name: Pitts
+Student Number: S03090733
+
+Course number: gw34253
+Number of students: 45
+Max students: 64
+Number of students: 5
+Email: roihgoha@gmail.com
+
+Course number: FGH45341
+Number of students: 3
+Max students: 4
+Number of students: 7
+Room Number:BP102
+
+Course number: CBT103601
+Number of students: 5
+Max students: 20
+Number of students: 4

@@ -43,7 +43,6 @@ public class CourseAP {
 		this.maxStudents = maxStudents;
 	}
 
-
 	public int getCredits() {
 		return credits;
 	}
@@ -55,7 +54,7 @@ public class CourseAP {
 	@Override
 	public String toString() {
 		return "courseNumber: " + courseNumber + "\nstudents: " + students + "\nmaxStudents: " + maxStudents
-			 + "\ncredits: " + credits;
+				+ "\ncredits: " + credits;
 	}
 
 }
