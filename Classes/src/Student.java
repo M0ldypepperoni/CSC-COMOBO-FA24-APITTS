@@ -84,23 +84,6 @@ public class Student {
 
 	}
 
-	public static void prepareForFile(CourseAP course) {
-		String cN = String.format("Course number: ", course.getCourseNumber());
-		String sA = String.format("Number of students: ", course.getStudents());
-		String sM = String.format("Max students: ", course.getMaxStudents());
-		String cA = String.format("Number of students: ", course.getCredits());
-
-		if (course instanceof InPersonCourse) {
-			String rN = String.format("Room Number:", ((InPersonCourse) course).getRoom());
-		}
-		if (course instanceof OnlineCourse) {
-			String tE = String.format("Email: ", ((OnlineCourse) course).getEmail());
-		}
-		if (course instanceof RemoteCourse) {
-			String wL = String.format("WebEx address: ", ((RemoteCourse) course).getWebEx());
-		}
-	}
-
 	private static void printDetails(CourseAP course) {
 		System.out.println("Course number: " + course.getCourseNumber());
 		System.out.println("Number of students:" + course.getStudents());
