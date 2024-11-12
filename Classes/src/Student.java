@@ -1,13 +1,15 @@
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Student {
 	private String fName, lName, sNum;
-
+	private String filePath = "C:\\Users\\S03090733\\CSC-COMOBO-FA24-APITTS\\Classes\\newCourse.txt";
 	private ArrayList<CourseAP> courses;
-
+	
 	public Student(String fName, String lName, String sNum) {
 		super();
 		this.fName = fName;
@@ -50,9 +52,46 @@ public class Student {
 			System.out.println();
 		}
 	}
-
+	public void readFrom() {
+		Scanner input = new Scanner(System.in);
+		String courseType = "";
+		String courseNum = "";
+		int stuNum = 0;
+		int stuMax = 0;
+		int cred = 0;
+		String lastString = "";
+		try {
+			Scanner fileIn = new Scanner(new File(filePath));
+			while(fileIn.hasNext()) {
+				System.out.println("what type of course is this");
+				courseType = input.next();
+				courseNum = fileIn.next();
+				stuNum = fileIn.nextInt();
+				stuMax = fileIn.nextInt();
+				cred = fileIn.nextInt();
+				lastString = fileIn.next();
+				if (courseType.contains("online") || courseType.contains("Online") || courseType.contains("onlineCourse") ||  courseType.contains("OnlineCourse")) {
+				CourseAP course3 = new OnlineCourse(courseNum, stuNum, stuMax, cred, lastString);
+				courses.add(course3);
+				} else if(courseType.contains("in-person") || courseType.contains("In-Person") || courseType.contains("in-personCourse") 
+						|| courseType.contains("inperson") || courseType.contains("Inperson") || courseType.contains("inpersonCourse") || courseType.contains("InpersonCourse")) {
+					CourseAP course3 = new InPersonCourse(courseNum, stuNum, stuMax, cred, lastString);
+					courses.add(course3);
+				} else {
+					CourseAP course3 = new RemoteCourse(courseNum, stuNum, stuMax, cred, lastString);
+					courses.add(course3);
+				}
+				
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	public void writeToFile() {
-		String outFile = "C:\\Users\\drago\\CSC-COMOBO-FA24-APITTS\\Classes\\classes.txt";
+		String outFile = "C:\\Users\\S03090733\\CSC-COMOBO-FA24-APITTS\\Classes\\classes.txt";
 		try {
 			FileWriter writer = new FileWriter(outFile);
 
@@ -64,10 +103,10 @@ public class Student {
 				writer.write("\nCourse number: " + crse.getCourseNumber());
 				writer.write("\nNumber of students: " + crse.getStudents());
 				writer.write("\nMax students: " + crse.getMaxStudents());
-				writer.write("\nNumber of students: " + crse.getCredits());
+				writer.write("\nCredits: " + crse.getCredits());
 
 				if (crse instanceof InPersonCourse) {
-					writer.write("\nRoom Number:" + ((InPersonCourse) crse).getRoom() + "\n");
+					writer.write("\nRoom Number: " + ((InPersonCourse) crse).getRoom() + "\n");
 				}
 				if (crse instanceof OnlineCourse) {
 					writer.write("\nEmail: " + ((OnlineCourse) crse).getEmail() + "\n");
