@@ -31,7 +31,7 @@ public class Pile {
 
 	public void addPile(Pile oldPile) {
 		while (!oldPile.isEmpty()) {
-			this.cards.add(oldPile.popCard());
+	 		this.cards.add(oldPile.popCard());
 		}
 	}
 
