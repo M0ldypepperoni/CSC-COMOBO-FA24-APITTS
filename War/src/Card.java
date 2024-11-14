@@ -32,6 +32,10 @@ public class Card {
 		}
 		return 0;
 	}
+	
+	public boolean twoPair(Card that) {
+		return this.rank == that.rank;
+	}
 
 	public int getRank() {
 		return rank;
