@@ -50,6 +50,25 @@ public class Pile {
 	public void shufflePile() {
 		Collections.shuffle(cards);
 	}
+	
+	public void shufflesPiles(Pile cards1) {
+	    for (int i = cards1.size() - 1; i > 0; i--) {
+	      int index = rand.nextInt(i + 1);
+	      // Simple swap
+	      Card temp = cards1.get(index);
+	      cards1.set(index, cards1.get(i));
+	      cards1.set(i, temp);
+	    }
+	  }
+
+	private Card set(int index, Card card) {
+		return cards.set(index, card);
+		
+	}
+
+	private Card get(int index2) {
+		return cards.get(index2);
+	}
 
 	@Override
 	public String toString() {
@@ -59,4 +78,6 @@ public class Pile {
 		}
 		return str;
 	}
+
+	
 }

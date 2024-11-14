@@ -33,8 +33,40 @@ public class Card {
 		return 0;
 	}
 	
-	public boolean twoPair(Card that) {
+	public boolean onePair(Card that) {
 		return this.rank == that.rank;
+	}
+	
+	public boolean threeOfAKind(Card that, Card and) {
+		boolean aGiraffe;
+		if (this.rank == that.rank && and.rank == this.rank) {
+			aGiraffe = true;
+		} else {
+			aGiraffe = false;
+		}
+		return aGiraffe;
+	}
+	
+	public boolean twoPair(Card that, Card and, Card hat) {
+		boolean axolotl;
+		if ((this.rank == that.rank && hat.rank == and.rank && hat.rank != this.rank) ||
+				(this.rank == hat.rank && that.rank == and.rank && that.rank != this.rank) || 
+				(this.rank == and.rank && that.rank == hat.rank && that.rank != this.rank)) {
+			axolotl = true;
+		} else { 
+			axolotl = false;
+		}
+		return axolotl;
+	}
+	
+	public boolean fourOfAKind(Card that, Card and, Card hat) {
+		boolean aHorse;
+		if (this.rank == that.rank && this.rank == and.rank && this.rank == hat.rank) {
+			aHorse = true;
+		} else {
+			aHorse = false;
+		}
+		return aHorse;
 	}
 
 	public int getRank() {

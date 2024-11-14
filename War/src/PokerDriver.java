@@ -8,7 +8,6 @@ public class PokerDriver {
 	public static int playerPoints = 1000;
 	public static int pot = 0;
 	public static int lilB = 0;
-	public static int bigB = 1;
 	public static int botP = 1000;
 	public static int b1P = 1000;
 	public static int b2P = 1000;
@@ -57,14 +56,13 @@ public class PokerDriver {
 		while (again == 'y' || again == 'Y') {
 
 			roundSetup(deck, pAtT);
+			
+			left.shufflesPiles(left);
 
-			left.shufflePile();
 			if (count == 1) {
-// for little and big blind use rand int for if and else move left one
 				Collections.shuffle(pAtT);
 			} else {
 				lilB += 1;
-				bigB += 1;
 			}
 			if (pAtT.get(lilB).equals("player")) {
 				pStartingBet(bet, preBet, pAtT);
@@ -86,6 +84,7 @@ public class PokerDriver {
 			betting(choice, bet, preBet, again);
 			if (choice == 1) continue;
 			table.addCard(left.popCard());
+			
 			count++;
 
 			System.out.println("Play again?");
@@ -125,25 +124,25 @@ public class PokerDriver {
 		default:
 			System.out.println("Only pick 1 - 3");
 		}
-		if (pAtT2.get(bigB).equals("b1")) {
+		if (pAtT2.get(lilB+1).equals("b1")) {
 			b1P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b2")) {
+		} else if (pAtT2.get(lilB+1).equals("b2")) {
 			b2P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b3")) {
+		} else if (pAtT2.get(lilB+1).equals("b3")) {
 			b3P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b4")) {
+		} else if (pAtT2.get(lilB+1).equals("b4")) {
 			b4P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b5")) {
+		} else if (pAtT2.get(lilB+1).equals("b5")) {
 			b5P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b6")) {
+		} else if (pAtT2.get(lilB+1).equals("b6")) {
 			b6P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b7")) {
+		} else if (pAtT2.get(lilB+1).equals("b7")) {
 			b7P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b8")) {
+		} else if (pAtT2.get(lilB+1).equals("b8")) {
 			b8P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b9")) {
+		} else if (pAtT2.get(lilB+1).equals("b9")) {
 			b9P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b10")) {
+		} else if (pAtT2.get(lilB+1).equals("b10")) {
 			b10P -= bet2;
 		}
 		pot += bet2;
@@ -354,27 +353,27 @@ public class PokerDriver {
 				System.out.println("Only pick 1 - 3");
 			}
 		}
-		if (pAtT2.get(bigB).equals("player")) {
+		if (pAtT2.get(lilB+1).equals("player")) {
 			playerPoints -= bet2;
-		} else if (pAtT2.get(bigB).equals("b1")) {
+		} else if (pAtT2.get(lilB+1).equals("b1")) {
 			b1P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b2")) {
+		} else if (pAtT2.get(lilB+1).equals("b2")) {
 			b2P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b3")) {
+		} else if (pAtT2.get(lilB+1).equals("b3")) {
 			b3P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b4")) {
+		} else if (pAtT2.get(lilB+1).equals("b4")) {
 			b4P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b5")) {
+		} else if (pAtT2.get(lilB+1).equals("b5")) {
 			b5P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b6")) {
+		} else if (pAtT2.get(lilB+1).equals("b6")) {
 			b6P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b7")) {
+		} else if (pAtT2.get(lilB+1).equals("b7")) {
 			b7P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b8")) {
+		} else if (pAtT2.get(lilB+1).equals("b8")) {
 			b8P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b9")) {
+		} else if (pAtT2.get(lilB+1).equals("b9")) {
 			b9P -= bet2;
-		} else if (pAtT2.get(bigB).equals("b10")) {
+		} else if (pAtT2.get(lilB+1).equals("b10")) {
 			b10P -= bet2;
 		}
 		pot += bet2;
