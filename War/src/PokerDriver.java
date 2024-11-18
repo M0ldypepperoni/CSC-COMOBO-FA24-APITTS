@@ -84,7 +84,18 @@ public class PokerDriver {
 			betting(choice, bet, preBet, again);
 			if (choice == 1) continue;
 			table.addCard(left.popCard());
+			int test = table.size();
 			
+			System.out.println(table);
+			System.out.println();
+			table.sortPiles(table);
+			System.out.println(table);
+			
+			System.out.println(player);
+			
+			System.out.println(checkPair(player, table));
+			System.out.println(test);
+			System.out.println(player.size());
 			count++;
 
 			System.out.println("Play again?");
@@ -575,5 +586,23 @@ public class PokerDriver {
 			System.out.println("error");
 			break;
 		}
+	}
+	
+	public static boolean checkPair(Pile hand, Pile commune) {
+		boolean check = false;
+		for (int i = 0; i < 5; i++) {
+			if (i == 0) {
+				if (hand.get(0).onePair(player.get(1))) {
+					check = true;
+				}
+			}
+			if (hand.get(0).onePair(commune.get(i))) {
+				check = true;
+			}	
+			if (hand.get(1).onePair(commune.get(i))) {
+				check = true;
+			}
+		}
+		return check;
 	}
 }

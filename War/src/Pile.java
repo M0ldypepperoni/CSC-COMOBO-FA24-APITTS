@@ -46,6 +46,10 @@ public class Pile {
 	public ArrayList<Card> getCards() {
 		return cards;
 	}
+	
+	public int getRanked(int index) {
+		return cards.get(index).getRank();
+	}
 
 	public void shufflePile() {
 		Collections.shuffle(cards);
@@ -60,13 +64,26 @@ public class Pile {
 	      cards1.set(i, temp);
 	    }
 	  }
+	
+	public void sortPiles(Pile cards) {
+		int n = cards.size();
+		for(int i = 0;i < n; i++){
+		    for(int j=0;j < n - 1; j++){
+		       if(cards.getRanked(j) > cards.getRanked(j+1)){
+		            Card temp = cards.get(j);
+		            cards.set(j, cards.get(j+1));
+		            cards.set(j+1,temp);
+		        }
+		   }
+		}
+	}
 
 	private Card set(int index, Card card) {
 		return cards.set(index, card);
 		
 	}
 
-	private Card get(int index2) {
+	public Card get(int index2) {
 		return cards.get(index2);
 	}
 
