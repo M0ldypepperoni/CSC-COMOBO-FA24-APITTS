@@ -65,7 +65,7 @@ public class Pile {
 	    }
 	  }
 	
-	public void sortPiles(Pile cards) {
+	public void sortByRank(Pile cards) {
 		int n = cards.size();
 		for(int i = 0;i < n; i++){
 		    for(int j=0;j < n - 1; j++){
@@ -76,6 +76,24 @@ public class Pile {
 		        }
 		   }
 		}
+	}
+	
+	public void sortBySuit(Pile cards) {
+		int n = cards.size();
+		for(int i = 0;i < n; i++){
+		    for(int j=0;j < n - 1; j++){
+		       if(cards.getSuit(j) > cards.getSuit(j+1)){
+		            Card temp = cards.get(j);
+		            cards.set(j, cards.get(j+1));
+		            cards.set(j+1,temp);
+		      }
+		   }
+		}
+	}
+
+	public int getSuit(int index) {
+		// TODO Auto-generated method stub
+		return cards.get(index).getSuit();
 	}
 
 	private Card set(int index, Card card) {

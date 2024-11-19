@@ -88,16 +88,17 @@ public class PokerDriver {
 			
 			System.out.println(table);
 			System.out.println();
-			table.sortPiles(table);
+			
 			System.out.println(table);
 			
 			System.out.println(player);
 			
-			System.out.println(checkPair(player, table));
+			System.out.println(checkTwoPairs(player, table));
 			System.out.println(test);
 			System.out.println(player.size());
 			count++;
-
+			
+			reset(pAtT);
 			System.out.println("Play again?");
 			again = input.next().charAt(0);
 		}
@@ -571,6 +572,7 @@ public class PokerDriver {
 		case 1:
 			System.out.println("Play another round?");
 			again = input.next().charAt(0);
+			break;
 		case 2:
 			bet = preBet;
 			playerPoints -= bet;
@@ -589,20 +591,95 @@ public class PokerDriver {
 	}
 	
 	public static boolean checkPair(Pile hand, Pile commune) {
-		boolean check = false;
+		table.sortByRank(commune);
 		for (int i = 0; i < 5; i++) {
 			if (i == 0) {
-				if (hand.get(0).onePair(player.get(1))) {
-					check = true;
+				if (hand.get(0).onePair(hand .get(1))) {
+					return true;
 				}
 			}
 			if (hand.get(0).onePair(commune.get(i))) {
-				check = true;
+				return true;
 			}	
 			if (hand.get(1).onePair(commune.get(i))) {
-				check = true;
+				return true;
 			}
 		}
-		return check;
+		return false;
+	}
+	
+	public static boolean checkFullHouse(Pile hand, Pile commune) {
+		table.sortByRank(commune);
+		for (int i = 0; i < 2; i++) {
+			if (hand.get(0).fullHouse(hand.get(1), commune.get(i), commune.get(i+1), commune.get(i+2))) {
+					return true;
+			}
+			if (hand.get(0).fullHouse(hand.get(1), commune.get(i+1), commune.get(i+2), commune.get(i+3))) {
+				return true;
+			}
+			if (hand.get(0).fullHouse(commune.get(i), commune.get(i+1), commune.get(i+2), commune.get(i+3))) {
+				return true;
+			}	
+			if (hand.get(1).fullHouse(commune.get(i), commune.get(i+1), commune.get(i+2), commune.get(i+3))) {
+				return true;
+			}
+		}
+		return false;	
+	}
+	
+	public static boolean checkFlush(Pile hand, Pile commune) {
+		table.sortBySuit(commune);
+		for (int i = 0; i < 2; i++) {
+			if (hand.get(0).flush(hand.get(1), commune.get(i), commune.get(i+1), commune.get(i+2))) {
+				return true;
+			}
+			if (hand.get(0).flush(hand.get(1), commune.get(i+1), commune.get(i+2), commune.get(i+3))) {
+				return true;
+			}
+			if (hand.get(0).flush(commune.get(i), commune.get(i+1), commune.get(i+2), commune.get(i+3))) {
+				return true;
+			}	
+			if (hand.get(1).flush(commune.get(i), commune.get(i+1), commune.get(i+2), commune.get(i+3))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean checkTwoPairs(Pile hand, Pile commune) {
+		table.sortByRank(commune);
+		for (int i = 0; i < 3; i++) {
+			if (hand.get(0).twoPair(hand.get(1), commune.get(i), commune.get(i+1))) {
+				return true;
+			}
+			if (hand.get(0).twoPair(hand.get(1), commune.get(i+1), commune.get(i+2))) {
+				return true;
+			}
+			if (hand.get(0).twoPair(commune.get(i), commune.get(i+1), commune.get(i+2))) {
+				return true;
+			}	
+			if (hand.get(1).twoPair(commune.get(i), commune.get(i+1), commune.get(i+2))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+ 	public static void reset(ArrayList<String> pAtT) {
+		player.clear();
+		b1.clear();
+		b2.clear();
+		b3.clear();
+		b4.clear();
+		b5.clear();
+		b6.clear();
+		b7.clear();
+		b8.clear();
+		b7.clear();
+		b8.clear();
+		b9.clear();
+		b10.clear();
+		table.clear();
+		pAtT.clear();
 	}
 }
