@@ -19,6 +19,7 @@ public class PokerDriver {
 	public static int b8P = 1000;
 	public static int b9P = 1000;
 	public static int b10P = 1000;
+	public static int count = 1;	
 	public static int botAmount = 0;
 	public static Random rand = new Random();
 	public static Scanner input = new Scanner(System.in);
@@ -35,8 +36,15 @@ public class PokerDriver {
 	public static Pile b10 = new Pile();
 	public static Pile left = new Pile();
 	public static Pile table = new Pile();
-	public static int count = 1;
-
+	public static boolean cFH = false;
+	public static boolean cSF = false;
+	public static boolean c1P = false;
+	public static boolean c2P = false;
+	public static boolean cF = false; 
+	public static boolean cS = false;
+	public static boolean c4K = false;
+	public static boolean c3K = false;
+	
 	public static void main(String[] args) {
 		int choice = 0;
 		char again = 'y';
@@ -90,9 +98,9 @@ public class PokerDriver {
 			System.out.println(player);
 			
 			System.out.println();
-			checkStraight(player, table);
 			
-			System.out.println(player.size());
+			
+			
 			count++;
 			if (count == botAmount+1) {
 				lilB = 0;
@@ -392,7 +400,7 @@ public class PokerDriver {
 		preBet2 = bet2;
 	}
 
-	public static void roundSetup(Deck deck, ArrayList<String> pAtT) {
+ 	public static void roundSetup(Deck deck, ArrayList<String> pAtT) {
 
 		deck.shuffle();
 
@@ -646,29 +654,22 @@ public class PokerDriver {
 		return false;
 	}
 	
-	public static boolean checkTwoPairs(Pile hand, Pile commune) {
-		table.sortByRank(commune);
-		for (int i = 0; i < 3; i++) {
-			if (hand.get(0).twoPair(hand.get(1), commune.get(i), commune.get(i+1))) {
-				return true;
-			}
-			if (hand.get(0).twoPair(hand.get(1), commune.get(i+1), commune.get(i+2))) {
-				return true;
-			}
-			if (hand.get(0).twoPair(commune.get(i), commune.get(i+1), commune.get(i+2))) {
-				return true;
-			}	
-			if (hand.get(1).twoPair(commune.get(i), commune.get(i+1), commune.get(i+2))) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public static void checkStraight(Pile hand, Pile commune) {
+	public static void checkTwoPairs(Pile hand, Pile commune) {
 		Pile checkPile = new Pile();
 		checkPile.addPiled(hand);
-		checkPile.addPiled(commune);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 5; i++) {
+			if (checkPile.get(i).twoPair(hand.get(i+1), checkPile.get(i+2), checkPile.get(i+3))) {
+				c2P = true;
+			}
+		}
+	}
+	
+	public static void checkStraight(Pile hand) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
 		checkPile.sortByRank(checkPile);
 		checkPile.removeDupes(checkPile);
 		int n = checkPile.size();
@@ -680,10 +681,10 @@ public class PokerDriver {
 		}
 	}
 	
-	public static void checkStraightFlush(Pile hand, Pile commune) {
+	public static void checkStraightFlush(Pile hand) {
 		Pile checkPile = new Pile();
 		checkPile.addPiled(hand);
-		checkPile.addPiled(commune);
+		checkPile.addPiled(table);
 		checkPile.selectionSortP(checkPile);
 		checkPile.removeDupes(checkPile);
 		int n = checkPile.size();
@@ -691,15 +692,16 @@ public class PokerDriver {
 		for (int i = 0; i <= n-5; i++) {
 			if (checkPile.get(i).straightFlush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
 				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2) + checkPile.get(i+3) + checkPile.get(i+4));
+				cSF = true;
 			}
 		}
 		System.out.println("false");
 	}
 	
-	public static void checkFourOfAKind(Pile hand, Pile commune) {
+	public static void checkFourOfAKind(Pile hand) {
 		Pile checkPile = new Pile();
 		checkPile.addPiled(hand);
-		checkPile.addPiled(commune);
+		checkPile.addPiled(table);
 		checkPile.sortByRank(checkPile);
 		for (int i = 0; i < 5; i++) {
 			if (checkPile.get(i).fourOfAKind(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3))) {
@@ -708,19 +710,18 @@ public class PokerDriver {
 		}
 	}
 	
-	public static void checkThreeOfAKind(Pile hand, Pile commune) {
+	public static void checkThreeOfAKind(Pile hand) {
 		Pile checkPile = new Pile();
 		checkPile.addPiled(hand);
-		checkPile.addPiled(commune);
+		checkPile.addPiled(table);
 		checkPile.sortByRank(checkPile);
 		for (int i = 0; i < 6; i++) {
 			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
 				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2));
 			}
 		}
-	}
-	
- 	public static void reset(ArrayList<String> pAtT) {
+	}	
+	public static void reset(ArrayList<String> pAtT) {
 		player.clear();
 		b1.clear();
 		b2.clear();
@@ -737,4 +738,43 @@ public class PokerDriver {
 		table.clear();
 		pAtT.clear();
 	}
+	public static void resetBools() {
+ 		cFH = false;
+ 		c2P = false;
+ 		c3K = false;
+ 		c4K = false;
+ 		cF = false;
+ 		c1P = false;
+ 		cS = false;
+ 		cSF = false;
+ 	}
+ 	
+ 	
+	public static void checkHand(ArrayList<String> pAtT) {
+ 		int counts = 0;
+ 		int n = pAtT.size();
+ 		for (int i = 0; i < n; i++) {
+ 			if (pAtT.get(i).equals("player")) {
+ 				
+ 			} if (pAtT.get(i).equals("b1")) {
+ 				
+ 			} if (pAtT.get(i).equals("b2")) {
+ 				
+ 			} if (pAtT.get(i).equals("b3")) {
+ 				
+ 			} if (pAtT.get(i).equals("b4")) {
+ 				
+ 			} if (pAtT.get(i).equals("b5")) {
+ 				
+ 			} if (pAtT.get(i).equals("b6")) {
+ 				
+ 			} if (pAtT.get(i).equals("b7")) {
+ 				
+ 			} if (pAtT.get(i).equals("b8")) {
+ 				
+ 			} if (pAtT.get(i).equals("b9")) {
+ 				
+ 			} 
+ 		}
+ 	}
 }
