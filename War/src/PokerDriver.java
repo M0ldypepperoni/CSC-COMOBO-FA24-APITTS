@@ -84,20 +84,20 @@ public class PokerDriver {
 			betting(choice, bet, preBet, again);
 			if (choice == 1) continue;
 			table.addCard(left.popCard());
-			int test = table.size();
-			
-			System.out.println(table);
-			System.out.println();
 			
 			System.out.println(table);
 			
 			System.out.println(player);
 			
-			System.out.println(checkTwoPairs(player, table));
-			System.out.println(test);
+			System.out.println();
+			checkStraight(player, table);
+			
 			System.out.println(player.size());
 			count++;
-			
+			if (count == botAmount+1) {
+				lilB = 0;
+				count = 2;
+			}
 			reset(pAtT);
 			System.out.println("Play again?");
 			again = input.next().charAt(0);
@@ -663,6 +663,61 @@ public class PokerDriver {
 			}
 		}
 		return false;
+	}
+	
+	public static void checkStraight(Pile hand, Pile commune) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(commune);
+		checkPile.sortByRank(checkPile);
+		checkPile.removeDupes(checkPile);
+		int n = checkPile.size();
+		System.out.println(n);
+		for (int i = 0; i <= n-5; i++) {
+			if (checkPile.get(i).straight(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
+				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2) + checkPile.get(i+3) + checkPile.get(i+4));
+			}
+		}
+	}
+	
+	public static void checkStraightFlush(Pile hand, Pile commune) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(commune);
+		checkPile.selectionSortP(checkPile);
+		checkPile.removeDupes(checkPile);
+		int n = checkPile.size();
+		System.out.println(n);
+		for (int i = 0; i <= n-5; i++) {
+			if (checkPile.get(i).straightFlush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
+				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2) + checkPile.get(i+3) + checkPile.get(i+4));
+			}
+		}
+		System.out.println("false");
+	}
+	
+	public static void checkFourOfAKind(Pile hand, Pile commune) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(commune);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 5; i++) {
+			if (checkPile.get(i).fourOfAKind(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3))) {
+				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2) + checkPile.get(i+3));
+			}
+		}
+	}
+	
+	public static void checkThreeOfAKind(Pile hand, Pile commune) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(commune);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 6; i++) {
+			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
+				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2));
+			}
+		}
 	}
 	
  	public static void reset(ArrayList<String> pAtT) {

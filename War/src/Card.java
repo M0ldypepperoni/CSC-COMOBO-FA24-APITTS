@@ -61,7 +61,8 @@ public class Card {
 	}
 	
 	public boolean straight(Card that, Card and, Card other, Card another) {
-		if (this.rank < that.rank && that.rank < and.rank && and.rank < other.rank && other.rank < another.rank) {
+		if ((this.rank < that.rank && that.rank == (this.rank+1)) && (that.rank < and.rank && and.rank == (that.rank+1)) && 
+				(and.rank < other.rank && other.rank == (and.rank+1)) && (other.rank < another.rank && another.rank == (other.rank+1))) {
 			return true;
 		}
 		return false;

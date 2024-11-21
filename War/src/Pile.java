@@ -29,12 +29,16 @@ public class Pile {
 		}
 	}
 
+	public void addPiled(Pile oldPile) {
+		for (Card card : oldPile.getCards()) {
+			this.cards.add(card);
+		}
+	}
 	public void addPile(Pile oldPile) {
 		while (!oldPile.isEmpty()) {
 	 		this.cards.add(oldPile.popCard());
 		}
 	}
-
 	public void clear() {
 		this.cards = new ArrayList<Card>();
 	}
@@ -65,6 +69,22 @@ public class Pile {
 	    }
 	  }
 	
+	private int pileLowest(Pile cards, int low, int high) {
+		int lowest = low;
+		for (int i = low; i < high; i++) {
+			if (cards.get(i).compareTo(cards.get(lowest)) < 0) {
+				lowest = i;
+			}
+		}
+		return lowest;
+	}
+	
+	private void swapCards(Pile cards, int i, int j) {
+		Card temp = cards.get(i);
+		cards.set(i, cards.get(j));
+		cards.set(j, temp);
+	}
+	
 	public void sortByRank(Pile cards) {
 		int n = cards.size();
 		for(int i = 0;i < n; i++){
@@ -76,6 +96,16 @@ public class Pile {
 		        }
 		   }
 		}
+	}
+	
+	public void selectionSortP(Pile cards) {
+		int n = cards.size();
+		// find the lowest card at or to the right of i
+		for (int i = 0; i < n; i++) {
+			int lowest = pileLowest(cards, i, n);
+			swapCards(cards, i, lowest);
+		}
+		// swap that card wit h the card at i
 	}
 	
 	public void sortBySuit(Pile cards) {
@@ -90,9 +120,29 @@ public class Pile {
 		   }
 		}
 	}
+	
+	public void removeDupes(Pile cards) {
+		int n = cards.size()-1;
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			if (cards.getRanked(i) == cards.getRanked(i+1)) {
+				count++;
+			}
+		}
+		n -= count;
+		for (int i = 0; i < n; i++) {
+			if (cards.getRanked(i) == cards.getRanked(i+1)) {
+				cards.remove(i+1);
+			}
+		}
+		
+	}
 
+	public Card remove(int index) {
+		return cards.remove(index);
+	}
+	
 	public int getSuit(int index) {
-		// TODO Auto-generated method stub
 		return cards.get(index).getSuit();
 	}
 
