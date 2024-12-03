@@ -23,6 +23,7 @@ public class PokerDriver {
 	public static int count = 1;	
 	public static int botAmount = 0;
 	public static int preBet = 0;
+	public static int preChoice = 0;
 	public static String pHighH = "";
 	public static String b1HighH = "";
 	public static String b2HighH = "";
@@ -69,14 +70,11 @@ public class PokerDriver {
 	public static Card high8;
 	public static Card high9;
 	public static Card high10;
-	
 	public static void main(String[] args) {
 		int choice = 0;
 		char again = 'y';
-		// array for points maybe?
 		// TODO add file writer and reader for high-score
 		int bet = 0;
-		
 
 		Deck deck = new Deck();
 
@@ -105,16 +103,16 @@ public class PokerDriver {
 			System.out.println(pot);
 			System.out.println(playerPoints);
 
-			betting(choice, bet, again);
+			betting(choice, bet, again, pAtT);
 			if (choice == 1) continue;
-			
+			if (choice != 3) preChoice = 4;
 			for(int i = 0; i < 3; i++) {
 			table.addCard(left.popCard());
 			}
-			betting(choice, bet, again);
+			betting(choice, bet, again, pAtT);
 			if (choice == 1) continue;
 			table.addCard(left.popCard());
-			betting(choice, bet, again);
+			betting(choice, bet, again, pAtT);
 			if (choice == 1) continue;
 			table.addCard(left.popCard());
 			
@@ -597,30 +595,61 @@ public class PokerDriver {
 		}
 	}
 
-	public static void betting(int choice, int bet, char again) {
-
-		System.out.println("Chose \n1. fold \n2. call \n3. raise");
-		choice = input.nextInt();
-
-		switch (choice) {
-		case 1:
-			System.out.println("Play another round?");
-			again = input.next().charAt(0);
-			break;
-		case 2:
-			bet = preBet;
-			playerPoints -= bet;
-			pot += bet;
-			break;
-		case 3:
-			System.out.println("Must be greater than the current bet:" + preBet + ".");
-			bet = input.nextInt();
-			playerPoints -= bet;
-			pot += bet;
-			break;
-		default:
-			System.out.println("error");
-			break;
+	public static void betting(int choice, int bet, char again, ArrayList<String> pAtT) {
+		boolean got = true;
+		int n = pAtT.size();
+		for (int i = 0; i < n; i++) {
+			got = true;
+			while (got) {
+				if (pAtT.get(i).equals("player")) {
+					System.out.println("Choose \n1. fold \n2. call \n3. raise \n4. check");
+					choice = input.nextInt();
+				} else {
+					choice = rand.nextInt(4) + 1;
+				}
+				switch (choice) {
+				case 1:
+					if (pAtT.get(i).equals("player")) {
+					System.out.println("Play another round?");
+					again = input.next().charAt(0);
+					}
+					pAtT.remove(i);
+					got = false;
+					break;
+				case 2:
+					bet = preBet;
+					playerPoints -= bet;
+					pot += bet;
+					preChoice = choice;
+					got = false;
+					break;
+				case 3:
+					while (preBet >= bet) {
+						if (pAtT.get(i).equals("player")) {
+							System.out.println("Must be greater than the current bet:" + preBet + ".");
+							bet = input.nextInt();
+						} else {
+							bet = rand.nextInt(40) + preBet+1;
+						}
+					}
+					preBet = bet;
+					preChoice = choice;
+					playerPoints -= bet;
+					pot += bet;
+					got = false;
+					break;
+				case 4:
+					if (preChoice == choice) {
+						got = false;
+					} else {
+						System.out.println("Pick another option.");
+					}
+					break;
+				default:
+					System.out.println("error");
+					break;
+				}
+			}
 		}
 	}
 	
@@ -750,6 +779,7 @@ public class PokerDriver {
 		for (int i = 0; i < 4; i++) {
 			if (checkPile.get(i).fourOfAKind(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3))) {
 				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2) + checkPile.get(i+3));
+				high = checkPile.get(i);
 				c4K = true;
 			}
 		}
@@ -763,6 +793,7 @@ public class PokerDriver {
 		for (int i = 0; i < 5; i++) {
 			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
 				System.out.println("" + checkPile.get(i) + checkPile.get(i+1) + checkPile.get(i+2));
+				high = checkPile.get(i);
 				c3K = true;
 			}
 		}
@@ -785,6 +816,7 @@ public class PokerDriver {
 		table.clear();
 		pAtT.clear();
 	}
+	
 	public static void resetBools() {
  		cFH = false;
  		c2P = false;
@@ -804,8 +836,7 @@ public class PokerDriver {
  				player.sortByRank(player);
  		 		highP = player.get(1);
  				checkPair(player);
- 				if (c1P) {
- 					highP = high; 
+ 				if (c1P) { 
  					pHighH = "Pair";
  				 }
  				checkTwoPairs(player);
@@ -848,8 +879,7 @@ public class PokerDriver {
  				b1.sortByRank(b1);
  		 		high1 = b1.get(1);
  				checkPair(b1);
- 				if (c1P) {
- 					high1 = high; 
+ 				if (c1P) { 
  					b1HighH = "Pair";
  				 }
  				checkTwoPairs(b1);
@@ -893,7 +923,6 @@ public class PokerDriver {
  		 		high2 = b2.get(1);
  				checkPair(b2);
  				if (c1P) {
- 					high2 = high; 
  					b2HighH = "Pair";
  				 }
  				checkTwoPairs(b2);
@@ -936,8 +965,7 @@ public class PokerDriver {
  				b3.sortByRank(b3);
  		 		high3 = b3.get(1);
  				checkPair(b3);
- 				if (c1P) {
- 					high3 = high; 
+ 				if (c1P) { 
  					b3HighH = "Pair";
  				 }
  				checkTwoPairs(b3);
@@ -981,7 +1009,6 @@ public class PokerDriver {
  		 		high4 = b4.get(1);
  				checkPair(b4);
  				if (c1P) {
- 					high4 = high; 
  					b4HighH = "Pair";
  				 }
  				checkTwoPairs(b4);
@@ -1025,7 +1052,6 @@ public class PokerDriver {
  		 		high5 = b5.get(1);
  				checkPair(b5);
  				if (c1P) {
- 					high5 = high; 
  					b5HighH = "Pair";
  				 }
  				checkTwoPairs(b5);
@@ -1069,7 +1095,6 @@ public class PokerDriver {
  		 		high6 = b6.get(1);
  				checkPair(b6);
  				if (c1P) {
- 					high6 = high; 
  					b6HighH = "Pair";
  				 }
  				checkTwoPairs(b6);
@@ -1112,8 +1137,7 @@ public class PokerDriver {
  				b7.sortByRank(b7);
  		 		high7 = b7.get(1);
  				checkPair(b7);
- 				if (c1P) {
- 					high7 = high; 
+ 				if (c1P) { 
  					b7HighH = "Pair";
  				 }
  				checkTwoPairs(b7);
@@ -1156,8 +1180,7 @@ public class PokerDriver {
  				b8.sortByRank(b8);
  		 		high8 = b8.get(1);
  				checkPair(b8);
- 				if (c1P) {
- 					high8 = high; 
+ 				if (c1P) {; 
  					b8HighH = "Pair";
  				 }
  				checkTwoPairs(b8);
@@ -1200,8 +1223,7 @@ public class PokerDriver {
  				b9.sortByRank(b9);
  		 		high9 = b9.get(1);
  				checkPair(b9);
- 				if (c1P) {
- 					high9 = high; 
+ 				if (c1P) { 
  					b9HighH = "Pair";
  				 }
  				checkTwoPairs(b9);
@@ -1244,8 +1266,7 @@ public class PokerDriver {
  				b10.sortByRank(b10);
  		 		high10 = b10.get(1);
  				checkPair(b10);
- 				if (c1P) {
- 					high10 = high; 
+ 				if (c1P) { 
  					b10HighH = "Pair";
  				 }
  				checkTwoPairs(b10);
@@ -1287,4 +1308,44 @@ public class PokerDriver {
  			}
  		}
  	}
+	
+	public static void compareH(String h1, String h2) {
+		int int1 = 0;
+		int int2 = 0;
+		if (h1.equals("Pair")) {
+			int1 = 1;
+		} else if (h1.equals("2Ps")) {
+			int1 = 2;
+		} else if (h1.equals("3OAK")) {
+			int1 = 3;
+		} else if (h1.equals("Straight")) {
+			int1 = 4;
+		} else if (h1.equals("Flush")) {
+			int1 = 5;
+		} else if (h1.equals("FH")) {
+			int1 = 6;
+		} else if (h1.equals("4OAK")) {
+			int1 = 7;
+		} else if (h1.equals("SF")) {
+			int1 = 8;
+		}
+		if (h2.equals("Pair")) {
+			int2 = 1;
+		} else if (h2.equals("2Ps")) {
+			int2 = 2;
+		} else if (h2.equals("3OAK")) {
+			int2 = 3;
+		} else if (h2.equals("Straight")) {
+			int2 = 4;
+		} else if (h2.equals("Flush")) {
+			int2 = 5;
+		} else if (h2.equals("FH")) {
+			int2 = 6;
+		} else if (h2.equals("4OAK")) {
+			int2 = 7;
+		} else if (h2.equals("SF")) {
+			int2 = 8;
+		}
+		
+	}
 }
