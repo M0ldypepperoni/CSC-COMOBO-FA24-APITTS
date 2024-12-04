@@ -61,6 +61,7 @@ public class PokerDriver {
 	public static int[] combo;
 	public static boolean fold = false;
 	public static char again = 'y';
+	public HighScore scored = new HighScore();
 	
 	public static void main(String[] args) {
 		int choice = 0;
@@ -408,7 +409,7 @@ public class PokerDriver {
 		pot += bet2;
 		preBet = bet2;
 	}
-//when bots else starts the round
+//when bots starts the round
  	public static void roundSetup(Deck deck, ArrayList<String> pAtT) {
 
 		deck.shuffle();
