@@ -6,35 +6,23 @@ import java.util.Scanner;
 public class PokerDriver {
 
 	public PersonData player1 = new PersonData("player", 0, "", null);
-	public static int playerPoints = 1000;
+	public static int playerPoints = 10000;
 	public static int pot = 0;
 	public static int lilB = 0;
-	public static int botP = 1000;
-	public static int b1P = 1000;
-	public static int b2P = 1000;
-	public static int b3P = 1000;
-	public static int b4P = 1000;
-	public static int b5P = 1000;
-	public static int b6P = 1000;
-	public static int b7P = 1000;
-	public static int b8P = 1000;
-	public static int b9P = 1000;
-	public static int b10P = 1000;
+	public static int b1P = 10000;
+	public static int b2P = 10000;
+	public static int b3P = 10000;
+	public static int b4P = 10000;
+	public static int b5P = 10000;
+	public static int b6P = 10000;
+	public static int b7P = 10000;
+	public static int b8P = 10000;
+	public static int b9P = 10000;
+	public static int b10P = 10000;
 	public static int count = 1;	
 	public static int botAmount = 0;
 	public static int preBet = 0;
 	public static int preChoice = 0;
-	public static String pHighH = "";
-	public static String b1HighH = "";
-	public static String b2HighH = "";
-	public static String b3HighH = "";
-	public static String b4HighH = "";
-	public static String b5HighH = "";
-	public static String b6HighH = "";
-	public static String b7HighH = "";
-	public static String b8HighH = "";
-	public static String b9HighH = "";
-	public static String b10HighH = "";
 	public static Random rand = new Random();
 	public static Scanner input = new Scanner(System.in);
 	public static Pile player = new Pile();
@@ -58,24 +46,24 @@ public class PokerDriver {
 	public static boolean cS = false;
 	public static boolean c4K = false;
 	public static boolean c3K = false;
-	public static Card high;  
-	public static Card highP;
-	public static Card high1;
-	public static Card high2;
-	public static Card high3;
-	public static Card high4;
-	public static Card high5;
-	public static Card high6;
-	public static Card high7;
-	public static Card high8;
-	public static Card high9;
-	public static Card high10;
+	public static Card high = null;  
+	public static Card highP = null;
+	public static Card high1 = null;
+	public static Card high2 = null;
+	public static Card high3 = null;
+	public static Card high4 = null;
+	public static Card high5 = null;
+	public static Card high6 = null;
+	public static Card high7 = null;
+	public static Card high8 = null;
+	public static Card high9 = null;
+	public static Card high10 = null;
 	public static int[] combo;
+	public static boolean fold = false;
+	public static char again = 'y';
 	
 	public static void main(String[] args) {
 		int choice = 0;
-		char again = 'y';
-		int net = 0;
 		// TODO add file writer and reader for high-score
 		int bet = 0;
 
@@ -87,8 +75,6 @@ public class PokerDriver {
 		botAmount = input.nextInt();
 		ArrayList<String> pAtT = new ArrayList<>(botAmount + 1);
 		combo = new int[botAmount + 1];
-		net = pAtT.size();
-//		combo = (botAmount+1);
 
 		while (again == 'y' || again == 'Y') {
 
@@ -101,6 +87,7 @@ public class PokerDriver {
 			} else {
 				lilB += 1;
 			}
+			System.out.println(player);
 			if (pAtT.get(lilB).equals("player")) {
 				pStartingBet(bet, pAtT);
 			} else {
@@ -109,38 +96,46 @@ public class PokerDriver {
 			System.out.println(pot);
 			System.out.println(playerPoints);
 
-			betting(choice, bet, again, pAtT);
-			net = pAtT.size();
-			if (choice == 1) continue;
+			betting(choice, bet, pAtT);
+			if (fold == true) continue;
 			if (choice != 3) preChoice = 4;
 			for(int i = 0; i < 3; i++) {
 			table.addCard(left.popCard());
 			}
-			betting(choice, bet, again, pAtT);
-			net = pAtT.size();
-			if (choice == 1) continue;
-			table.addCard(left.popCard());
-			betting(choice, bet, again, pAtT);
-			net = pAtT.size();
-			if (choice == 1) continue;
-			table.addCard(left.popCard());
-			
 			System.out.println(table);
+			System.out.println();
+			System.out.println(pot);
+			betting(choice, bet, pAtT);
+			if (fold == true) continue;
+			table.addCard(left.popCard());
+			System.out.println(table);
+			System.out.println();
+			System.out.println(pot);
+			betting(choice, bet, pAtT);
 			
+			if (fold == true) continue;
+			table.addCard(left.popCard());
+			System.out.println(pot);
+			System.out.println();
+			System.out.println(table);
+			System.out.println();
 			System.out.println(player);
 			System.out.println();
-//			checkPair(player);
 			checkHand(pAtT);
-			System.out.println(pAtT);
-			for (int i = 0; i < combo.length; i++) {
-			System.out.println(combo[i]);
-			}
+			compareH(pAtT);
 			count++;
 			if (count == botAmount+1) {
 				lilB = 0;
 				count = 2;
 			}
-			reset(pAtT);
+			System.out.println(playerPoints);
+			if (playerPoints <= 0) {
+				System.out.println("You lost!");
+				break;
+			}
+			
+			reset();
+			resetBools();
 			System.out.println("Play again?");
 			again = input.next().charAt(0);
 		}
@@ -222,8 +217,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b2")) {
 			switch (bet2) {
@@ -242,8 +235,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b3")) {
 			switch (bet2) {
@@ -262,8 +253,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b4")) {
 			switch (bet2) {
@@ -282,8 +271,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b5")) {
 			switch (bet2) {
@@ -302,8 +289,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b6")) {
 			switch (bet2) {
@@ -322,8 +307,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 
 		} else if (pAtT2.get(lilB).equals("b7")) {
@@ -343,8 +326,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b8")) {
 			switch (bet2) {
@@ -363,8 +344,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b9")) {
 			switch (bet2) {
@@ -383,8 +362,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		} else if (pAtT2.get(lilB).equals("b10")) {
 			switch (bet2) {
@@ -403,8 +380,6 @@ public class PokerDriver {
 				pot += 10;
 				bet2 = 15;
 				break;
-			default:
-				System.out.println("Only pick 1 - 3");
 			}
 		}
 		if (pAtT2.get(lilB+1).equals("player")) {
@@ -625,7 +600,7 @@ public class PokerDriver {
 		}
 	}
 //setups up round based on how what amount is typed in
-	public static void betting(int choice, int bet, char again, ArrayList<String> pAtT) {
+	public static void betting(int choice, int bet, ArrayList<String> pAtT) {
 		boolean got = true;
 		int n = pAtT.size();
 		int c2 =0;
@@ -641,8 +616,9 @@ public class PokerDriver {
 				switch (choice) {
 				case 1:
 					if (pAtT.get(i).equals("player")) {
-					System.out.println("Play another round?");
-					again = input.next().charAt(0);
+						fold = true;
+						System.out.println("Play another round?");
+						again = input.next().charAt(0);
 					}
 					pAtT.remove(i);
 					c2++;
@@ -800,7 +776,6 @@ public class PokerDriver {
 				high = checkPile.get(i+4);
 			}
 		}
-		System.out.println("false");
 	}
 	
 	public static void checkFourOfAKind(Pile hand) {
@@ -829,7 +804,7 @@ public class PokerDriver {
 		}
 	}	
 	
-	public static void reset(ArrayList<String> pAtT) {
+	public static void reset() {
 		player.clear();
 		b1.clear();
 		b2.clear();
@@ -844,8 +819,30 @@ public class PokerDriver {
 		b9.clear();
 		b10.clear();
 		table.clear();
+		left.clear();
 		for (int i = 0; i < combo.length; i++) {
 			combo[i] = 0;
+		}
+		if(b1P <= 0) {
+			b1P = 10000;
+		} if(b2P <= 0) {
+			b2P = 10000;
+		} if(b3P <= 0) {
+			b3P = 10000;
+		} if(b4P <= 0) {
+			b4P = 10000;
+		} if(b5P <= 0) {
+			b5P = 10000;
+		} if(b6P <= 0) {
+			b6P = 10000;
+		} if(b7P <= 0) {
+			b7P = 10000;
+		} if(b8P <= 0) {
+			b8P = 10000;
+		} if(b9P <= 0) {
+			b9P = 10000;
+		} if(b10P <= 0) {
+			b10P = 10000;
 		}
 	}
 //resets the piles and hand rank for the beginning rounds 
@@ -868,49 +865,41 @@ public class PokerDriver {
  		 		highP = player.get(1);
  				checkPair(player);
  				if (c1P) { 
- 					pHighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(player);
  				if (c2P) {
  					highP = high; 
- 					pHighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(player);
  				if (c3K) {
  					highP = high; 
- 					pHighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(player);
  				if (cS) {
   					highP = high; 
-  					pHighH = "Straight";
   					combo[i] = 4;
   				 } 
  				checkFlush(player);
  				if (cF) {
   					highP = high; 
-  					pHighH = "Flush";
   					combo[i] = 5;
   				 }
  				checkFullHouse(player);
  				if (cFH) {
   					highP = high; 
-  					pHighH = "FH";
   					combo[i] = 6;
   				 }
  				checkFourOfAKind(player);
  				 if (c4K) {
   					highP = high; 
-  					pHighH = "4OAK";
   					combo[i] = 7;
   				 }
  				checkStraightFlush(player);
  				 if (cSF) {
  					highP = high; 
- 					pHighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -919,49 +908,41 @@ public class PokerDriver {
  		 		high1 = b1.get(1);
  				checkPair(b1);
  				if (c1P) { 
- 					b1HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b1);
  				if (c2P) {
  					high1 = high; 
- 					b1HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b1);
  				if (c3K) {
  					high1 = high; 
- 					b1HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b1);
  				if (cS) {
  					high1 = high; 
- 					b1HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b1);
  				if (cF) {
  					high1 = high; 
- 					b1HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b1);
  				if (cFH) {
  					high1 = high; 
- 					b1HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b1);
  				 if (c4K) {
  					high1 = high;
- 					b1HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b1);
  				 if (cSF) {
  					high1 = high; 
- 					b1HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -970,49 +951,41 @@ public class PokerDriver {
  		 		high2 = b2.get(1);
  				checkPair(b2);
  				if (c1P) {
- 					b2HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b2);
  				if (c2P) {
  					high2 = high; 
- 					b2HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b2);
  				if (c3K) {
  					high2 = high; 
- 					b2HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b2);
  				if (cS) {
  					high2 = high; 
- 					b2HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b2);
  				if (cF) {
  					high2 = high; 
- 					b2HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b2);
  				if (cFH) {
  					high2 = high; 
- 					b2HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b2);
  				 if (c4K) {
  					high2 = high; 
- 					b2HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b2);
  				 if (cSF) {
  					high2 = high; 
- 					b2HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1021,49 +994,41 @@ public class PokerDriver {
  		 		high3 = b3.get(1);
  				checkPair(b3);
  				if (c1P) { 
- 					b3HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b3);
  				if (c2P) {
  					high3 = high; 
- 					b3HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b3);
  				if (c3K) {
  					high3 = high;
- 					b3HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b3);
  				if (cS) {
  					high3 = high; 
- 					b3HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b3);
  				if (cF) {
  					high3 = high;
- 					b3HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b3);
  				if (cFH) {
  					high3 = high; 
- 					b3HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b3);
  				 if (c4K) {
  					high3 = high; 
- 					b3HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b3);
  				 if (cSF) {
  					high3 = high; 
- 					b3HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1072,49 +1037,41 @@ public class PokerDriver {
  		 		high4 = b4.get(1);
  				checkPair(b4);
  				if (c1P) {
- 					b4HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b4);
  				if (c2P) {
  					high4 = high; 
- 					b4HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b4);
  				if (c3K) {
  					high4 = high; 
- 					b4HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b4);
  				if (cS) {
  					high4 = high; 
- 					b4HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b4);
  				if (cF) {
  					high4 = high; 
- 					b4HighH = "Flush";
  					combo[i] = 5;
  				}
  				checkFullHouse(b4);
  				if (cFH) {
  					high4 = high; 
- 					b4HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b4);
  				 if (c4K) {
  					high4 = high; 
- 					b4HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b4);
  				 if (cSF) {
  					high4 = high; 
- 					b4HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1123,49 +1080,41 @@ public class PokerDriver {
  		 		high5 = b5.get(1);
  				checkPair(b5);
  				if (c1P) {
- 					b5HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b5);
  				if (c2P) {
  					high5 = high; 
- 					b5HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b5);
  				if (c3K) {
  					high5 = high; 
- 					b5HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b5);
  				if (cS) {
  					high5 = high;
- 					b5HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b5);
  				if (cF) {
  					high5 = high; 
- 					b5HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b5);
  				if (cFH) {
  					high5 = high;
- 					b5HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b5);
  				 if (c4K) {
  					high5 = high; 
- 					b5HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b5);
  				 if (cSF) {
  					high5 = high;
- 					b5HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1174,49 +1123,41 @@ public class PokerDriver {
  		 		high6 = b6.get(1);
  				checkPair(b6);
  				if (c1P) {
- 					b6HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b6);
  				if (c2P) {
  					high6 = high; 
- 					b6HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b6);
  				if (c3K) {
  					high6 = high; 
- 					b6HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b6);
  				if (cS) {
  					high6 = high; 
- 					b6HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b6);
  				if (cF) {
  					high6 = high; 
- 					b6HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b6);
  				if (cFH) {
  					high6 = high; 
- 					b6HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b6);
  				 if (c4K) {
  					high6 = high; 
- 					b6HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b6);
  				 if (cSF) {
  					high6 = high; 
- 					b6HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1225,49 +1166,41 @@ public class PokerDriver {
  		 		high7 = b7.get(1);
  				checkPair(b7);
  				if (c1P) { 
- 					b7HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b7);
  				if (c2P) {
  					high7 = high; 
- 					b7HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b7);
  				if (c3K) {
  					high7 = high; 
- 					b7HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b7);
  				if (cS) {
  					high7 = high; 
- 					b7HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b7);
  				if (cF) {
  					high7 = high; 
- 					b7HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b7);
  				if (cFH) {
  					high7 = high; 
- 					b7HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b7);
  				 if (c4K) {
  					high7 = high; 
- 					b7HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b7);
  				 if (cSF) {
  					high7 = high; 
- 					b7HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1276,49 +1209,41 @@ public class PokerDriver {
  		 		high8 = b8.get(1);
  				checkPair(b8);
  				if (c1P) {; 
- 					b8HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b8);
  				if (c2P) {
  					high8 = high; 
- 					b8HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b8);
  				if (c3K) {
  					high8 = high; 
- 					b8HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b8);
  				if (cS) {
  					high8 = high; 
- 					b8HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b8);
  				if (cF) {
  					high8 = high; 
- 					b8HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b8);
  				if (cFH) {
  					high8 = high;
- 					b8HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b8);
  				 if (c4K) {
  					high8 = high; 
- 					b8HighH = "4OAK";
  					combo[i] = 7;
   				 }
  				checkStraightFlush(b8);
  				 if (cSF) {
  					high8 = high; 
- 					b8HighH = "SF";
  					combo[i] = 8;
  				 }
  				resetBools();
@@ -1327,49 +1252,41 @@ public class PokerDriver {
  		 		high9 = b9.get(1);
  				checkPair(b9);
  				if (c1P) { 
- 					b9HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b9);
  				if (c2P) {
  					high9 = high; 
- 					b9HighH = "2Ps";
  					combo[i] = 2;
  				 }
  				checkThreeOfAKind(b9);
  				if (c3K) {
  					high9 = high; 
- 					b9HighH = "3OAK";
  					combo[i] = 3;
  				 }
  				checkStraight(b9);
  				if (cS) {
  					high9 = high;
- 					b9HighH = "Straight";
  					combo[i] = 4;
   				 } 
  				checkFlush(b9);
  				if (cF) {
  					high9 = high; 
- 					b9HighH = "Flush";
  					combo[i] = 5;
   				 }
  				checkFullHouse(b9);
  				if (cFH) {
  					high9 = high; 
- 					b9HighH = "FH";
  					combo[i] = 6;
   				 }
  				checkFourOfAKind(b9);
  				 if (c4K) {
   					high9 = high; 
-  					b9HighH = "4OAK";
   					combo[i] = 7;
   				 }
  				checkStraightFlush(b9);
  				 if (cSF) {
   					high9 = high;
-  					b9HighH = "SF";
   					combo[i] = 8;
  				 }
  				resetBools();
@@ -1378,50 +1295,42 @@ public class PokerDriver {
  		 		high10 = b10.get(1);
  				checkPair(b10);
  				if (c1P) { 
- 					b10HighH = "Pair";
  					combo[i] = 1;
  				 }
  				checkTwoPairs(b10);
  				if (c2P) {
  					high10 = high;
  					combo[i] = 2;
- 					b10HighH = "2Ps";
  				 }
  				checkThreeOfAKind(b10);
  				if (c3K) {
  					high10 = high;
  					combo[i] = 3;
- 					b10HighH = "3OAK";
  				 }
  				checkStraight(b10);
  				if (cS) {
  					high10 = high; 
  					combo[i] = 4;
- 					b10HighH = "Straight";
   				 } 
  				checkFlush(b10);
  				if (cF) {
  					high10 = high; 
  					combo[i] = 5;
- 					b10HighH = "Flush";
   				 }
  				checkFullHouse(b10);
  				if (cFH) {
  					high10 = high; 
  					combo[i] = 6;
- 					b10HighH = "FH";
   				 }
  				checkFourOfAKind(b10);
  				 if (c4K) {
  					high10 = high;
  					combo[i] = 7;
- 					b10HighH = "4OAK";
   				 }
  				checkStraightFlush(b10);
  				 if (cSF) {
  					high10 = high; 
  					combo[i] = 8;
- 					b10HighH = "SF";
  				 }
  				resetBools();
  			}
@@ -1430,16 +1339,167 @@ public class PokerDriver {
 //runs through all the checks and assigns high cards
 	public static void compareH(ArrayList<String> pAtT) {
 		int highest = 0;
+		int highest2 = 0;
 		String name = "";
+		String name2 = "";
+		Card hC = null;
+		Card hC2 = null;
 		int n = pAtT.size();
 		for (int i = 0; i < n; i++) {
 			if (combo[i] > highest) {
 				highest = combo[i];
 				name = pAtT.get(i);
-			}else if (combo[i] == highest) {
+				if (name.equals("player")) { 
+					hC = highP;
+				} if (name.equals("b1")) { 
+					hC = high1;
+				} if (name.equals("b2")) { 
+					hC = high2;
+				} if (name.equals("b3")) { 
+					hC = high3;
+				} if (name.equals("b4")) { 
+					hC = high4;
+				} if (name.equals("b5")) { 
+					hC = high5;
+				} if (name.equals("b6")) { 
+					hC = high6;
+				} if (name.equals("b7")) { 
+					hC = high7;
+				} if (name.equals("b8")) { 
+					hC = high8;
+				} if (name.equals("b9")) { 
+					hC = high9;
+				} if (name.equals("b10")) { 
+					hC = high10;
+				} 
+			}else if (combo[i] == highest && (!name.equals(name2))) {
 				//Set way to check which has the highest card amongst the players if combo and highest equal each other.
+				highest2 = combo[i];
+				name2 = pAtT.get(i);
+				if (name2.equals("player")) { 
+					hC2 = highP;
+				} if (name2.equals("b1")) { 
+					hC2 = high1;
+				} if (name2.equals("b2")) { 
+					hC2 = high2;
+				} if (name2.equals("b3")) { 
+					hC2 = high3;
+				} if (name2.equals("b4")) { 
+					hC2 = high4;
+				} if (name2.equals("b5")) { 
+					hC2 = high5;
+				} if (name2.equals("b6")) { 
+					hC2 = high6;
+				} if (name2.equals("b7")) { 
+					hC2 = high7;
+				} if (name2.equals("b8")) { 
+					hC2 = high8;
+				} if (name2.equals("b9")) { 
+					hC2 = high9;
+				} if (name2.equals("b10")) { 
+					hC2 = high10;
+				} 
+				if (hC2.getRank() > hC.getRank()) {
+					highest = highest2;
+					name = name2;
+					hC = hC2;
+				}
 			}
 		}
+		if (highest == highest2 && hC.getRank() == hC2.getRank() && (!name.equals(name2))) {
+			System.out.print(name + " tied with " + name2);
+			if (name.equals("player")) { 
+				playerPoints += pot/2;
+			} if (name.equals("b1")) { 
+				b1P += pot/2;
+			} if (name.equals("b2")) { 
+				b2P += pot/2;
+			} if (name.equals("b3")) { 
+				b3P += pot/2;
+			} if (name.equals("b4")) { 
+				b4P += pot/2;
+			} if (name.equals("b5")) { 
+				b5P += pot/2;
+			} if (name.equals("b6")) { 
+				b6P += pot/2;
+			} if (name.equals("b7")) { 
+				b7P += pot/2;
+			} if (name.equals("b8")) { 
+				b8P += pot/2;
+			} if (name.equals("b9")) { 
+				b9P += pot/2;
+			} if (name.equals("b10")) { 
+				b10P += pot/2;
+			} 
+			if (name2.equals("player")) { 
+				playerPoints += pot/2;
+			} if (name2.equals("b1")) { 
+				b1P += pot/2;
+			} if (name2.equals("b2")) { 
+				b2P += pot/2;
+			} if (name2.equals("b3")) { 
+				b3P += pot/2;
+			} if (name2.equals("b4")) { 
+				b4P += pot/2;
+			} if (name2.equals("b5")) { 
+				b5P += pot/2;
+			} if (name2.equals("b6")) { 
+				b6P += pot/2;
+			} if (name2.equals("b7")) { 
+				b7P += pot/2;
+			} if (name2.equals("b8")) { 
+				b8P += pot/2;
+			} if (name2.equals("b9")) { 
+				b9P += pot/2;
+			} if (name2.equals("b10")) { 
+				b10P += pot/2;
+			} 
+		} else {
+			System.out.print(name + " wins");
+			if (name.equals("player")) { 
+				playerPoints += pot;
+			} if (name.equals("b1")) { 
+				b1P += pot;
+			} if (name.equals("b2")) { 
+				b2P += pot;
+			} if (name.equals("b3")) { 
+				b3P += pot;
+			} if (name.equals("b4")) { 
+				b4P += pot;
+			} if (name.equals("b5")) { 
+				b5P += pot;
+			} if (name.equals("b6")) { 
+				b6P += pot;
+			} if (name.equals("b7")) { 
+				b7P += pot;
+			} if (name.equals("b8")) { 
+				b8P += pot;
+			} if (name.equals("b9")) { 
+				b9P += pot;
+			} if (name.equals("b10")) { 
+				b10P += pot;
+			} 
+		}
+		if (highest == 0) {
+			System.out.println(" by having the highest card: " + hC + "!");
+		} else if (highest == 1) {
+			System.out.println(" by having one pair!");
+		} else if (highest == 2) {
+			System.out.println(" by having two pairs!");
+		} else if (highest == 3) {
+			System.out.println(" by having three of a kind!");
+		} else if (highest == 4) {
+			System.out.println(" by having a straight!");
+		} else if (highest == 5) {
+			System.out.println(" by having a flush!");
+		} else if (highest == 6) {
+			System.out.println(" by having a full house!");
+		} else if (highest == 7) {
+			System.out.println(" by having four of a kind!");
+		} else if (highest == 8) {
+			System.out.println(" by having a straight flush!");
+		}
+		pot = 0;
 		
 	}
 //determines who wins

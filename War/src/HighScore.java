@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class HighScore {
 	private String intials;
@@ -31,5 +32,7 @@ public class HighScore {
 		this.highScore = highScore;
 	}
 	
-	
+	public void readFrom() {
+		Scanner input = new Scanner(System.in);
+	}
 }
