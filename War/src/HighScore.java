@@ -1,12 +1,14 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HighScore {
 	private String intials;
 	private String filePath = "C:\\Users\\S03090733\\CSC-COMOBO-FA24-APITTS\\War\\highscored.txt";
 	private int highScore;
-	public HighScore high =  new HighScore("", 0);
 	
 	public HighScore() {
 		this.intials = "";
@@ -43,9 +45,20 @@ public class HighScore {
 			while(fileIn.hasNext()) {
 				initial = fileIn.next();
 				preHighScore = fileIn.nextInt();
-				
 			}
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void writeToFile() {
+		try {
+			FileWriter writer = new FileWriter(filePath);
+			writer.write(intials);
+			writer.write("\n" + highScore);
+			writer.close();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

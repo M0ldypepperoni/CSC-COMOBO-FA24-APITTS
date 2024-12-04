@@ -61,13 +61,14 @@ public class PokerDriver {
 	public static int[] combo;
 	public static boolean fold = false;
 	public static char again = 'y';
-	public HighScore scored = new HighScore();
 	
 	public static void main(String[] args) {
 		int choice = 0;
 		// TODO add file writer and reader for high-score
 		int bet = 0;
-
+		HighScore current = new HighScore();
+		current.readFrom();
+		
 		Deck deck = new Deck();
 
 		deck.shuffle();
@@ -94,7 +95,7 @@ public class PokerDriver {
 			} else {
 				bStartingBet(bet, pAtT);
 			}
-			System.out.println(pot);
+			System.out.println("Pot: " + pot);
 			System.out.println(playerPoints);
 
 			betting(choice, bet, pAtT);
@@ -105,18 +106,18 @@ public class PokerDriver {
 			}
 			System.out.println(table);
 			System.out.println();
-			System.out.println(pot);
+			System.out.println("Pot: " + pot);
 			betting(choice, bet, pAtT);
 			if (fold == true) continue;
 			table.addCard(left.popCard());
 			System.out.println(table);
 			System.out.println();
-			System.out.println(pot);
+			System.out.println("Pot: " + pot);
 			betting(choice, bet, pAtT);
 			
 			if (fold == true) continue;
 			table.addCard(left.popCard());
-			System.out.println(pot);
+			System.out.println("Pot: " + pot);
 			System.out.println();
 			System.out.println(table);
 			System.out.println();
@@ -139,6 +140,12 @@ public class PokerDriver {
 			resetBools();
 			System.out.println("Play again?");
 			again = input.next().charAt(0);
+		}
+		if(playerPoints > current.getHighScore()) {
+			current.setHighScore(playerPoints);
+			System.out.println("Please enter your initials.");
+			current.setIntials(input.next());
+			current.writeToFile();
 		}
 	}
 
@@ -754,7 +761,6 @@ public class PokerDriver {
 		checkPile.sortByRank(checkPile);
 		checkPile.removeDupes(checkPile);
 		int n = checkPile.size();
-		System.out.println(n);
 		for (int i = 0; i <= n-5; i++) {
 			if (checkPile.get(i).straight(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
 				cS = true;
@@ -770,7 +776,6 @@ public class PokerDriver {
 		checkPile.selectionSortP(checkPile);
 		checkPile.removeDupes(checkPile);
 		int n = checkPile.size();
-		System.out.println(n);
 		for (int i = 0; i <= n-5; i++) {
 			if (checkPile.get(i).straightFlush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
 				cSF = true;
