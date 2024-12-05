@@ -109,6 +109,7 @@ public class PokerDriver {
 			System.out.println("Pot: " + pot);
 			betting(choice, bet, pAtT);
 			if (fold == true) continue;
+			if (choice != 3) preChoice = 4;
 			table.addCard(left.popCard());
 			System.out.println(table);
 			System.out.println();
@@ -124,6 +125,7 @@ public class PokerDriver {
 			System.out.println(player);
 			System.out.println();
 			checkHand(pAtT);
+			System.out.println(highP);
 			compareH(pAtT);
 			count++;
 			if (count == botAmount+1) {
@@ -673,143 +675,6 @@ public class PokerDriver {
 /* as it says betting: folding, calling, raising, checking.
  * don't really know how to get bots to fold without breaking the game.
  */
-	public static void checkPair(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortByRank(checkPile);
-		for (int i = 0; i < 6; i++) {
-				if (checkPile.get(i).onePair(checkPile.get(i+1))) {
-					c1P = true;
-			}
-		}
-	}
-//all these methods check for different hand combos
-	public static void checkFullHouse(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortByRank(checkPile);
-		for (int i = 0; i < 5; i++) {
-			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
-				for (int j = 0; j < 6; j++) {
-					if (checkPile.get(j).onePair(checkPile.get(j+1)) && checkPile.get(i) != checkPile.get(j)) {
-						cFH = true;
-						if (checkPile.getRanked(j) > checkPile.getRanked(i)) {
-							high = checkPile.get(j);
-						} else { 
-							high = checkPile.get(i);
-						}
-					}
-				}
-			}	
-		}
-	}
-	
-	public static void checkFlush(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortBySuit(checkPile);
-		for (int i = 0; i < 3; i++) {
-			if (checkPile.get(i).flush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
-				cF = true;
-				if (checkPile.getRanked(i) > checkPile.getRanked(i+1) && checkPile.getRanked(i) > checkPile.getRanked(i+2) 
-						&& checkPile.getRanked(i) > checkPile.getRanked(i+3) && checkPile.getRanked(i) > checkPile.getRanked(i+4)) {
-					high = checkPile.get(i);
-				} else if (checkPile.getRanked(i+1) > checkPile.getRanked(i) && checkPile.getRanked(i+1) > checkPile.getRanked(i+2) 
-						&& checkPile.getRanked(i+1) > checkPile.getRanked(i+3) && checkPile.getRanked(i+1) > checkPile.getRanked(i+4)) {
-					high = checkPile.get(i+1);
-				} else if (checkPile.getRanked(i+2) > checkPile.getRanked(i) && checkPile.getRanked(i+2) > checkPile.getRanked(i+1) 
-						&& checkPile.getRanked(i+2) > checkPile.getRanked(i+3) && checkPile.getRanked(i+2) > checkPile.getRanked(i+4)) {
-					high = checkPile.get(i+2);
-				} else if (checkPile.getRanked(i+3) > checkPile.getRanked(i) && checkPile.getRanked(i+3) > checkPile.getRanked(i+1) 
-						&& checkPile.getRanked(i+3) > checkPile.getRanked(i+2) && checkPile.getRanked(i+3) > checkPile.getRanked(i+4)) {
-					high = checkPile.get(i+3);
-				} else {
-					high = checkPile.get(i+4);
-				}
-			}		
-		}
-	}
-	
-	public static void checkTwoPairs(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortByRank(checkPile);
-		for (int i = 0; i < 6; i++) {
-			if (checkPile.get(i).onePair(checkPile.get(i+1))) {
-				for(int j = 0; j < 6; j++) {
-					if (checkPile.get(j).onePair(checkPile.get(j+1)) && checkPile.get(i) != checkPile.get(j)) {
-						c2P = true;
-						if (checkPile.getRanked(j) > checkPile.getRanked(i)) { 
-							high = checkPile.get(j);
-						} else {
-							high = checkPile.get(i);
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	public static void checkStraight(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortByRank(checkPile);
-		checkPile.removeDupes(checkPile);
-		int n = checkPile.size();
-		for (int i = 0; i <= n-5; i++) {
-			if (checkPile.get(i).straight(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
-				cS = true;
-				high = checkPile.get(i+4);
-			}
-		}
-	}
-	
-	public static void checkStraightFlush(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.selectionSortP(checkPile);
-		checkPile.removeDupes(checkPile);
-		int n = checkPile.size();
-		for (int i = 0; i <= n-5; i++) {
-			if (checkPile.get(i).straightFlush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
-				cSF = true;
-				high = checkPile.get(i+4);
-			}
-		}
-	}
-	
-	public static void checkFourOfAKind(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortByRank(checkPile);
-		for (int i = 0; i < 4; i++) {
-			if (checkPile.get(i).fourOfAKind(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3))) {
-				high = checkPile.get(i);
-				c4K = true;
-			}
-		}
-	}
-	
-	public static void checkThreeOfAKind(Pile hand) {
-		Pile checkPile = new Pile();
-		checkPile.addPiled(hand);
-		checkPile.addPiled(table);
-		checkPile.sortByRank(checkPile);
-		for (int i = 0; i < 5; i++) {
-			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
-				high = checkPile.get(i);
-				c3K = true;
-			}
-		}
-	}	
-	
 	public static void reset() {
 		player.clear();
 		b1.clear();
@@ -869,482 +734,406 @@ public class PokerDriver {
  			if (pAtT.get(i).equals("player")) {
  				player.sortByRank(player);
  		 		highP = player.get(1);
- 				checkPair(player);
+ 				player.checkPair(table, player, c1P, highP);
  				if (c1P) { 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(player);
- 				if (c2P) {
- 					highP = high; 
+ 				player.checkTwoPairs(player, table, c2P, highP);
+ 				if (c2P) { 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(player);
+ 				player.checkThreeOfAKind(player, table, c3K, highP);
  				if (c3K) {
- 					highP = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(player);
+ 				player.checkStraight(player, table, cS, highP);
  				if (cS) {
-  					highP = high; 
   					combo[i] = 4;
   				 } 
- 				checkFlush(player);
+ 				player.checkFlush(player, table, cF, highP);
  				if (cF) {
-  					highP = high; 
   					combo[i] = 5;
   				 }
- 				checkFullHouse(player);
+ 				player.checkFullHouse(player, table, cFH, highP);
  				if (cFH) {
-  					highP = high; 
   					combo[i] = 6;
   				 }
- 				checkFourOfAKind(player);
+ 				player.checkFourOfAKind(player, table, c4K, highP);
  				 if (c4K) {
-  					highP = high; 
   					combo[i] = 7;
   				 }
- 				checkStraightFlush(player);
+ 				player.checkStraightFlush(player, table, cSF, highP);
  				 if (cSF) {
- 					highP = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b1")) {
  				b1.sortByRank(b1);
  		 		high1 = b1.get(1);
- 				checkPair(b1);
+ 				b1.checkPair(b1, table, c1P, high1);
  				if (c1P) { 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b1);
+ 				b1.checkTwoPairs(b1, table, c2P, high1);
  				if (c2P) {
- 					high1 = high; 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b1);
+ 				b1.checkThreeOfAKind(b1, table, c3K, high1);
  				if (c3K) {
- 					high1 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b1);
+ 				b1.checkStraight(b1, table, cS, high1);
  				if (cS) {
- 					high1 = high; 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b1);
+ 				b1.checkFlush(b1, table, cF, high1);
  				if (cF) {
- 					high1 = high; 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b1);
- 				if (cFH) {
- 					high1 = high; 
+ 				b1.checkFullHouse(b1, table, cFH, high1);
+ 				if (cFH) { 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b1);
+ 				b1.checkFourOfAKind(b1, table, c4K, high1);
  				 if (c4K) {
- 					high1 = high;
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b1);
+ 				b1.checkStraightFlush(b1, table, cSF, high1);
  				 if (cSF) {
- 					high1 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b2")) {
  				b2.sortByRank(b2);
  		 		high2 = b2.get(1);
- 				checkPair(b2);
+ 				b2.checkPair(b2, table, c1P, high2);
  				if (c1P) {
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b2);
+ 				b2.checkTwoPairs(b2, table, c2P, high2);
  				if (c2P) {
- 					high2 = high; 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b2);
+ 				b2.checkThreeOfAKind(b2, table, c3K, high2);
  				if (c3K) {
- 					high2 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b2);
+ 				b2.checkStraight(b2, table, cS, high2);
  				if (cS) {
- 					high2 = high; 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b2);
- 				if (cF) {
- 					high2 = high; 
+ 				b2.checkFlush(b2, table, cF, high2);
+ 				if (cF) { 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b2);
+ 				b2.checkFullHouse(b2, table, cFH, high2);
  				if (cFH) {
- 					high2 = high; 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b2);
+ 				b2.checkFourOfAKind(b2, table, c4K, high2);
  				 if (c4K) {
- 					high2 = high; 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b2);
+ 				b2.checkStraightFlush(b2, table, cSF, high2);
  				 if (cSF) {
- 					high2 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b3")) {
  				b3.sortByRank(b3);
  		 		high3 = b3.get(1);
- 				checkPair(b3);
+ 				b3.checkPair(b3, table, c1P, high3);
  				if (c1P) { 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b3);
- 				if (c2P) {
- 					high3 = high; 
+ 				b3.checkTwoPairs(b3, table, c2P, high3);
+ 				if (c2P) { 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b3);
+ 				b3.checkThreeOfAKind(b3, table, c3K, high3);
  				if (c3K) {
- 					high3 = high;
  					combo[i] = 3;
  				 }
- 				checkStraight(b3);
+ 				b3.checkStraight(b3, table, cS, high3);
  				if (cS) {
- 					high3 = high; 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b3);
+ 				b3.checkFlush(b3, table, cF, high3);
  				if (cF) {
- 					high3 = high;
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b3);
- 				if (cFH) {
- 					high3 = high; 
+ 				b3.checkFullHouse(b3, table, cFH, high3);
+ 				if (cFH) { 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b3);
+ 				b3.checkFourOfAKind(b3, table, c4K, high3);
  				 if (c4K) {
- 					high3 = high; 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b3);
+ 				b3.checkStraightFlush(b3, table, cSF, high3);
  				 if (cSF) {
- 					high3 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b4")) {
  				b4.sortByRank(b4);
  		 		high4 = b4.get(1);
- 				checkPair(b4);
+ 				b4.checkPair(b4, table, c1P, high4);
  				if (c1P) {
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b4);
+ 				b4.checkTwoPairs(b4, table, c2P, high4);
  				if (c2P) {
- 					high4 = high; 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b4);
+ 				b4.checkThreeOfAKind(b4, table, c3K, high4);
  				if (c3K) {
- 					high4 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b4);
+ 				b4.checkStraight(b4, table, cS, high4);
  				if (cS) {
- 					high4 = high; 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b4);
+ 				b4.checkFlush(b4, table, cF, high4);
  				if (cF) {
- 					high4 = high; 
  					combo[i] = 5;
  				}
- 				checkFullHouse(b4);
- 				if (cFH) {
- 					high4 = high; 
+ 				b4.checkFullHouse(b4, table, cFH, high4);
+ 				if (cFH) {	 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b4);
- 				 if (c4K) {
- 					high4 = high; 
+ 				b4.checkFourOfAKind(b4, table, c4K, high4);
+ 				 if (c4K) { 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b4);
+ 				b4.checkStraightFlush(b4, table, cSF, high4);
  				 if (cSF) {
- 					high4 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b5")) {
  				b5.sortByRank(b5);
  		 		high5 = b5.get(1);
- 				checkPair(b5);
+ 				b5.checkPair(b5, table, c1P, high5);
  				if (c1P) {
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b5);
- 				if (c2P) {
- 					high5 = high; 
+ 				b5.checkTwoPairs(b5, table, c2P, high5);
+ 				if (c2P) { 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b5);
+ 				b5.checkThreeOfAKind(b5, table, c3K, high5);
  				if (c3K) {
- 					high5 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b5);
+ 				b5.checkStraight(b5, table, cS, high5);
  				if (cS) {
- 					high5 = high;
  					combo[i] = 4;
   				 } 
- 				checkFlush(b5);
+ 				b5.checkFlush(b5, table, cF, high5);
  				if (cF) {
- 					high5 = high; 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b5);
+ 				b5.checkFullHouse(b5, table, cFH, high5);
  				if (cFH) {
- 					high5 = high;
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b5);
+ 				b5.checkFourOfAKind(b5, table, c4K, high5);
  				 if (c4K) {
- 					high5 = high; 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b5);
+ 				b5.checkStraightFlush(b5, table, cSF, high5);
  				 if (cSF) {
- 					high5 = high;
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b6")) {
  				b6.sortByRank(b6);
  		 		high6 = b6.get(1);
- 				checkPair(b6);
+ 				b6.checkPair(b6, table, c1P, high6);
  				if (c1P) {
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b6);
- 				if (c2P) {
- 					high6 = high; 
+ 				b6.checkTwoPairs(b6, table, c2P, high6);
+ 				if (c2P) { 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b6);
+ 				b6.checkThreeOfAKind(b6, table, c3K, high6);
  				if (c3K) {
- 					high6 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b6);
+ 				b6.checkStraight(b6, table, cS, high6);
  				if (cS) {
- 					high6 = high; 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b6);
- 				if (cF) {
- 					high6 = high; 
+ 				b6.checkFlush(b6, table, cF, high6);
+ 				if (cF) { 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b6);
+ 				b6.checkFullHouse(b6, table, cFH, high6);
  				if (cFH) {
- 					high6 = high; 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b6);
+ 				b6.checkFourOfAKind(b6, table, c4K, high6);
  				 if (c4K) {
- 					high6 = high; 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b6);
- 				 if (cSF) {
- 					high6 = high; 
+ 				b6.checkStraightFlush(b6, table, cSF, high6);
+ 				 if (cSF) { 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b7")) {
  				b7.sortByRank(b7);
  		 		high7 = b7.get(1);
- 				checkPair(b7);
+ 				b7.checkPair(b7, table, c1P, high7);
  				if (c1P) { 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b7);
+ 				b7.checkTwoPairs(b7, table, c2P, high7);
  				if (c2P) {
- 					high7 = high; 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b7);
+ 				b7.checkThreeOfAKind(b7, table, c3K, high7);
  				if (c3K) {
- 					high7 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b7);
- 				if (cS) {
- 					high7 = high; 
+ 				b7.checkStraight(b7, table, cS, high7);
+ 				if (cS) { 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b7);
+ 				b7.checkFlush(b7, table, cF, high7);
  				if (cF) {
- 					high7 = high; 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b7);
- 				if (cFH) {
- 					high7 = high; 
+ 				b7.checkFullHouse(b7, table, cFH, high7);
+ 				if (cFH) { 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b7);
+ 				b7.checkFourOfAKind(b7, table, c4K, high7);
  				 if (c4K) {
- 					high7 = high; 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b7);
+ 				b7.checkStraightFlush(b7, table, cSF, high7);
  				 if (cSF) {
- 					high7 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b8")) {
  				b8.sortByRank(b8);
  		 		high8 = b8.get(1);
- 				checkPair(b8);
+ 				b8.checkPair(b8, table, c1P, high8);
  				if (c1P) {; 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b8);
+ 				b8.checkTwoPairs(b8, table, c2P, high8);
  				if (c2P) {
- 					high8 = high; 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b8);
+ 				b8.checkThreeOfAKind(b8, table, c3K, high8);
  				if (c3K) {
- 					high8 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b8);
- 				if (cS) {
- 					high8 = high; 
+ 				b8.checkStraight(b8, table, cS, high8);
+ 				if (cS) { 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b8);
+ 				b8.checkFlush(b8, table, cF, high8);
  				if (cF) {
- 					high8 = high; 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b8);
+ 				b8.checkFullHouse(b8, table, c1P, high8);
  				if (cFH) {
- 					high8 = high;
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b8);
+ 				b8.checkFourOfAKind(b8, table, c4K, high8);
  				 if (c4K) {
- 					high8 = high; 
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b8);
+ 				b8.checkStraightFlush(b8, table, cSF, high8);
  				 if (cSF) {
- 					high8 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b9")) {
  				b9.sortByRank(b9);
  		 		high9 = b9.get(1);
- 				checkPair(b9);
+ 				b9.checkPair(b9, table, c1P, high9);
  				if (c1P) { 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b9);
+ 				b9.checkTwoPairs(b9, table, c2P, high9);
  				if (c2P) {
- 					high9 = high; 
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b9);
+ 				b9.checkThreeOfAKind(b9, table, c3K, high9);
  				if (c3K) {
- 					high9 = high; 
  					combo[i] = 3;
  				 }
- 				checkStraight(b9);
+ 				b9.checkStraight(b9, table, cS, high9);
  				if (cS) {
- 					high9 = high;
  					combo[i] = 4;
   				 } 
- 				checkFlush(b9);
+ 				b9.checkFlush(b9, table, cF, high9);
  				if (cF) {
- 					high9 = high; 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b9);
- 				if (cFH) {
- 					high9 = high; 
+ 				b9.checkFullHouse(b9, table, cFH, high9);
+ 				if (cFH) { 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b9);
+ 				b9.checkFourOfAKind(b9, table, c4K, high9);
  				 if (c4K) {
-  					high9 = high; 
   					combo[i] = 7;
   				 }
- 				checkStraightFlush(b9);
+ 				b9.checkStraightFlush(b9, table, cSF, high9);
  				 if (cSF) {
-  					high9 = high;
   					combo[i] = 8;
  				 }
  				resetBools();
  			} if (pAtT.get(i).equals("b10")) {
  				b10.sortByRank(b10);
  		 		high10 = b10.get(1);
- 				checkPair(b10);
+ 				b10.checkPair(b10, table, c1P, high10);
  				if (c1P) { 
  					combo[i] = 1;
  				 }
- 				checkTwoPairs(b10);
+ 				b10.checkTwoPairs(b10, table, c2P, high10);
  				if (c2P) {
- 					high10 = high;
  					combo[i] = 2;
  				 }
- 				checkThreeOfAKind(b10);
+ 				b10.checkThreeOfAKind(b10, table, c3K, high10);
  				if (c3K) {
- 					high10 = high;
  					combo[i] = 3;
  				 }
- 				checkStraight(b10);
+ 				b10.checkStraight(b10, table, cS, high10);
  				if (cS) {
- 					high10 = high; 
  					combo[i] = 4;
   				 } 
- 				checkFlush(b10);
+ 				b10.checkFlush(b10, table, cF, high10);
  				if (cF) {
- 					high10 = high; 
  					combo[i] = 5;
   				 }
- 				checkFullHouse(b10);
- 				if (cFH) {
- 					high10 = high; 
+ 				b10.checkFullHouse(b10, table, cFH, high10);
+ 				if (cFH) { 
  					combo[i] = 6;
   				 }
- 				checkFourOfAKind(b10);
+ 				b10.checkFourOfAKind(b10, table, c4K, high10);
  				 if (c4K) {
- 					high10 = high;
  					combo[i] = 7;
   				 }
- 				checkStraightFlush(b10);
+ 				b10.checkStraightFlush(b10, table, cSF, high10);
  				 if (cSF) {
- 					high10 = high; 
  					combo[i] = 8;
  				 }
  				resetBools();
  			}
  		}
  	}
+	
 //runs through all the checks and assigns high cards
 	public static void compareH(ArrayList<String> pAtT) {
-		int highest = 0;
+		int highest = -1;
 		int highest2 = 0;
 		String name = "";
 		String name2 = "";

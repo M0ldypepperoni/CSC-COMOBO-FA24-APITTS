@@ -154,7 +154,145 @@ public class Pile {
 	public Card get(int index2) {
 		return cards.get(index2);
 	}
+	
+	public void checkPair(Pile hand, Pile table, boolean c1P, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 6; i++) {
+				if (checkPile.get(i).onePair(checkPile.get(i+1))) {
+					c1P = true;
+					high = checkPile.get(i);
+			}
+		}
+	}
+	
+	public void checkTwoPairs(Pile hand, Pile table, boolean c2P, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 6; i++) {
+			if (checkPile.get(i).onePair(checkPile.get(i+1))) {
+				for(int j = 0; j < 6; j++) {
+					if (checkPile.get(j).onePair(checkPile.get(j+1)) && checkPile.get(i) != checkPile.get(j)) {
+						c2P = true;
+						if (checkPile.getRanked(j) > checkPile.getRanked(i)) { 
+							high = checkPile.get(j);
+						} else {
+							high = checkPile.get(i);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void checkThreeOfAKind(Pile hand, Pile table, boolean c3K, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 5; i++) {
+			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
+				high = checkPile.get(i);
+				c3K = true;
+			}
+		}
+	}	
+	
+	public void checkStraight(Pile hand, Pile table, boolean cS, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		checkPile.removeDupes(checkPile);
+		int n = checkPile.size();
+		for (int i = 0; i <= n-5; i++) {
+			if (checkPile.get(i).straight(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
+				cS = true;
+				high = checkPile.get(i+4);
+			}
+		}
+	}
+	
+	public void checkFlush(Pile hand, Pile table, boolean cF, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortBySuit(checkPile);
+		for (int i = 0; i < 3; i++) {
+			if (checkPile.get(i).flush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
+				cF = true;
+				if (checkPile.getRanked(i) > checkPile.getRanked(i+1) && checkPile.getRanked(i) > checkPile.getRanked(i+2) 
+						&& checkPile.getRanked(i) > checkPile.getRanked(i+3) && checkPile.getRanked(i) > checkPile.getRanked(i+4)) {
+					high = checkPile.get(i);
+				} else if (checkPile.getRanked(i+1) > checkPile.getRanked(i) && checkPile.getRanked(i+1) > checkPile.getRanked(i+2) 
+						&& checkPile.getRanked(i+1) > checkPile.getRanked(i+3) && checkPile.getRanked(i+1) > checkPile.getRanked(i+4)) {
+					high = checkPile.get(i+1);
+				} else if (checkPile.getRanked(i+2) > checkPile.getRanked(i) && checkPile.getRanked(i+2) > checkPile.getRanked(i+1) 
+						&& checkPile.getRanked(i+2) > checkPile.getRanked(i+3) && checkPile.getRanked(i+2) > checkPile.getRanked(i+4)) {
+					high = checkPile.get(i+2);
+				} else if (checkPile.getRanked(i+3) > checkPile.getRanked(i) && checkPile.getRanked(i+3) > checkPile.getRanked(i+1) 
+						&& checkPile.getRanked(i+3) > checkPile.getRanked(i+2) && checkPile.getRanked(i+3) > checkPile.getRanked(i+4)) {
+					high = checkPile.get(i+3);
+				} else {
+					high = checkPile.get(i+4);
+				}
+			}		
+		}
+	}
+	
+	public void checkFullHouse(Pile hand, Pile table, boolean cFH, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 5; i++) {
+			if (checkPile.get(i).threeOfAKind(checkPile.get(i+1), checkPile.get(i+2))) {
+				for (int j = 0; j < 6; j++) {
+					if (checkPile.get(j).onePair(checkPile.get(j+1)) && checkPile.get(i) != checkPile.get(j)) {
+						cFH = true;
+						if (checkPile.getRanked(j) > checkPile.getRanked(i)) {
+							high = checkPile.get(j);
+						} else { 
+							high = checkPile.get(i);
+						}
+					}
+				}
+			}	
+		}
+	}
 
+	public void checkFourOfAKind(Pile hand, Pile table, boolean c4K, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.sortByRank(checkPile);
+		for (int i = 0; i < 4; i++) {
+			if (checkPile.get(i).fourOfAKind(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3))) {
+				high = checkPile.get(i);
+				c4K = true;
+			}
+		}
+	}
+	
+	public void checkStraightFlush(Pile hand, Pile table, boolean cSF, Card high) {
+		Pile checkPile = new Pile();
+		checkPile.addPiled(hand);
+		checkPile.addPiled(table);
+		checkPile.selectionSortP(checkPile);
+		checkPile.removeDupes(checkPile);
+		int n = checkPile.size();
+		for (int i = 0; i <= n-5; i++) {
+			if (checkPile.get(i).straightFlush(checkPile.get(i+1), checkPile.get(i+2), checkPile.get(i+3), checkPile.get(i+4))) {
+				cSF = true;
+				high = checkPile.get(i+4);
+			}
+		}
+	}
+	
 	@Override
 	public String toString() {
 		String str = "";
