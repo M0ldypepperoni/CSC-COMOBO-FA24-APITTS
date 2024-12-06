@@ -36,8 +36,8 @@ public class HighScore {
 		this.highScore = highScore;
 	}
 	
+	@SuppressWarnings("unused")
 	public void readFrom() {
-		Scanner input = new Scanner(System.in);
 		String initial = "";
 		int preHighScore = 0;
 		try {

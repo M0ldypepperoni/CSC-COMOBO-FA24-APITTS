@@ -5,7 +5,10 @@ import java.util.Scanner;
 
 public class PokerDriver {
 
-	public PersonData player1 = new PersonData("player", 0, "", null);
+	public static PersonData player1 = new PersonData("player", 1, 0, 0, null);
+	public static PersonData bot1 = new PersonData("b1", 2, 0, 0, null);
+	public static PersonData bot2 = new PersonData("b2", 3, 0, 0, null);
+	public static PersonData bot3 = new PersonData("b3", 4, 0, 0, null);
 	public static int playerPoints = 10000;
 	public static int pot = 0;
 	public static int lilB = 0;
@@ -64,15 +67,14 @@ public class PokerDriver {
 	
 	public static void main(String[] args) {
 		int choice = 0;
-		// TODO add file writer and reader for high-score
+		
 		int bet = 0;
 		HighScore current = new HighScore();
 		current.readFrom();
 		
 		Deck deck = new Deck();
-
 		deck.shuffle();
-
+		System.out.println();
 		System.out.println("Please enter the amount of bots you want to play against.");
 		botAmount = input.nextInt();
 		ArrayList<String> pAtT = new ArrayList<>(botAmount + 1);

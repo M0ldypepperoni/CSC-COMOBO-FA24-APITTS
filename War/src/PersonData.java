@@ -3,13 +3,26 @@ public class PersonData {
 	
 	private String name;
 	private Pile hand;
+	private int order;
 	private int points;
-	private String type;
+	private int type;
 	private Card high;
 
-	public PersonData(String name, int points, String type, Card high) {
+	
+	
+	public PersonData() {
+		super();
+		this.name = "";
+		this.order = 0;
+		this.points = 0;
+		this.type = 0;
+		this.high = null;
+	}
+
+	public PersonData(String name, int order, int points, int type, Card high) {
 		super();
 		this.name = name;
+		this.order = order;
 		this.hand = new Pile();
 		this.points = points;
 		this.type = type;
@@ -22,6 +35,19 @@ public class PersonData {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
+	public void setHand(Pile hand) {
+		this.hand = hand;
 	}
 
 	public Pile getHand() {
@@ -40,11 +66,11 @@ public class PersonData {
 		this.points = points;
 	}
 
-	public String getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 
