@@ -9,6 +9,13 @@ public class PokerDriver {
 	public static PersonData bot1 = new PersonData("b1", 2, 0, 0, null);
 	public static PersonData bot2 = new PersonData("b2", 3, 0, 0, null);
 	public static PersonData bot3 = new PersonData("b3", 4, 0, 0, null);
+  public static PersonData bot4 = new PersonData("b4", 5, 0, 0, null);
+  public static PersonData bot5 = new PersonData("b5", 6, 0, 0, null);
+  public static PersonData bot6 = new PersonData("b6", 7, 0, 0, null);
+  public static PersonData bot7 = new PersonData("b7", 8, 0, 0, null);
+  public static PersonData bot8 = new PersonData("b8", 9, 0, 0, null);
+  public static PersonData bot9 = new PersonData("b9", 10, 0, 0, null);
+  public static PersonData bot10 = new PersonData("b10", 11, 0, 0, null);
 	public static int playerPoints = 10000;
 	public static int pot = 0;
 	public static int lilB = 0;
