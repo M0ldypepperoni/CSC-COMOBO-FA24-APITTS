@@ -56,7 +56,8 @@ public class HighScore {
 		try {
 			FileWriter writer = new FileWriter(filePath);
 			writer.write(intials);
-			writer.write("\n" + highScore);
+			writer.write("\nHigh Score: ");
+			writer.write(highScore);
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
